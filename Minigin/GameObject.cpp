@@ -8,10 +8,15 @@ dae::GameObject::GameObject()
 {
 }
 
+dae::GameObject::~GameObject()
+{
+	m_Components.clear();
+}
+
 
 void dae::GameObject::Update(float deltaTime)
 {
-	for (const std::unique_ptr<Component>& component : m_pComponents)
+	for (const std::unique_ptr<Component>& component : m_Components)
 	{
 		component->Update(deltaTime);
 	}
@@ -19,7 +24,7 @@ void dae::GameObject::Update(float deltaTime)
 
 void dae::GameObject::Render() const
 {
-	for (const std::unique_ptr<Component>& component : m_pComponents)
+	for (const std::unique_ptr<Component>& component : m_Components)
 	{
 		component->Render();
 	}
@@ -40,7 +45,7 @@ void dae::GameObject::AddComponent(std::unique_ptr<Component> newComponent)
 {
 	if (newComponent != nullptr)
 	{
-		m_pComponents.push_back(std::move(newComponent));
+		m_Components.push_back(std::move(newComponent));
 	}
 }
 
@@ -48,6 +53,6 @@ void dae::GameObject::RemoveComponent(std::unique_ptr<Component> toRemoveCompone
 {
 	if (toRemoveComponent != nullptr)
 	{
-		m_pComponents.remove(toRemoveComponent);
+		m_Components.erase(std::remove(m_Components.begin(), m_Components.end(), toRemoveComponent), m_Components.end());
 	}
 }

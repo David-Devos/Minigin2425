@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "GameObject.h"
+#include "Component.h"
 
 #include <algorithm>
 
@@ -9,7 +10,7 @@ unsigned int Scene::m_idCounter = 0;
 
 Scene::Scene(const std::string& name) : m_name(name) {}
 
-Scene::~Scene() = default;
+Scene::~Scene() {};
 
 void Scene::Add(std::shared_ptr<GameObject> object)
 {

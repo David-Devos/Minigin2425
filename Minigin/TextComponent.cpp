@@ -4,10 +4,13 @@
 #include "Renderer.h"
 #include "Font.h"
 #include "Texture2D.h"
+#include "GameObject.h"
 
-dae::TextComponent::TextComponent(const std::string& text, std::shared_ptr<Font> font)
-	: m_needsUpdate(true), m_text(text), m_font(std::move(font)), m_textTexture(nullptr)
-{ }
+dae::TextComponent::TextComponent(const std::string& text, std::shared_ptr<Font> font, GameObject* gameObject)
+	: Component(gameObject), m_needsUpdate(true), m_text(text), m_font(std::move(font)), m_textTexture(nullptr), m_transform(*gameObject->GetTransform())
+{
+	
+}
 
 void dae::TextComponent::Update(float)
 {

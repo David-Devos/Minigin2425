@@ -87,7 +87,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	// todo: this update loop could use some work.
 	bool doContinue = true;
 	auto last_time = std::chrono::high_resolution_clock::now();
-	const long ms_per_frame = 60l;
+	const long ms_per_frame = 100l / 6l; // essentialy translates to 60 fps, don't worry about it
 	while (doContinue)
 	{
 		const auto current_time = std::chrono::high_resolution_clock::now();

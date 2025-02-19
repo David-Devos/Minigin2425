@@ -8,12 +8,12 @@ namespace dae
 	public:
 		void Update(float deltaTime) override;
 		void Render(Texture2D* texture) const;
-		void Render() const;
+		void Render() const ;
 		void SetTexture(const std::string& filename);
-		void SetTexture(std::shared_ptr<Texture2D>* texture);
+		void SetTexture(std::shared_ptr<Texture2D> texture);
 
 
-		RenderComponent(std::shared_ptr< GameObject> gameObject);
+		RenderComponent(GameObject* gameObject);
 		virtual ~RenderComponent() = default;
 		RenderComponent(const RenderComponent& other) = delete;
 		RenderComponent(RenderComponent&& other) = delete;

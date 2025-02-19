@@ -6,14 +6,14 @@ namespace dae
 	class Component
 	{
 	protected:
-		Component(std::shared_ptr< GameObject> gameObject);
-		Component() = default;
-		std::shared_ptr< GameObject> m_pGameObject;
+		Component(GameObject* gameObject);
+		//Component() = default; no default, cause a component can only exist with an owning game object
+		GameObject* m_pGameObject;
 
 	public:
-		virtual ~Component() = default;
+		virtual ~Component();
 		virtual void Update(float) = 0;
-		virtual void Render() = 0;
+		virtual void Render() const = 0;
 
 		Component(const Component& other) = delete;
 		Component(Component&& other) = delete;

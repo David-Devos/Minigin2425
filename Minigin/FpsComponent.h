@@ -9,9 +9,9 @@ namespace dae
 	{
 	public:
 		void Update(float deltaTime) override;
+		void Render() const override ;
 
-
-		FpsComponent(TextComponent* textComponent, std::shared_ptr<GameObject> gameObject);
+		FpsComponent(TextComponent* textComponent, GameObject* gameObject);
 		FpsComponent() = default;
 		virtual ~FpsComponent();
 		FpsComponent(const FpsComponent& other) = delete;

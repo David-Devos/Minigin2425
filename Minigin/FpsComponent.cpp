@@ -3,7 +3,7 @@
 #include <iomanip>
 
 
-dae::FpsComponent::FpsComponent(TextComponent* textComponent, std::shared_ptr<GameObject> gameObject) :Component(gameObject), m_Fps{ 0 }, m_pTextComponent{ textComponent }
+dae::FpsComponent::FpsComponent(TextComponent* textComponent, GameObject* gameObject) :Component(gameObject), m_Fps{ 0 }, m_pTextComponent{ textComponent }
 {
 }
 
@@ -19,6 +19,10 @@ void dae::FpsComponent::Update(float deltaTime)
 	m_pTextComponent->SetText(text.str());
 
 
+}
+
+void dae::FpsComponent::Render() const
+{
 }
 
 

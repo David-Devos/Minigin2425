@@ -3,7 +3,7 @@
 #include "Texture2D.h"
 #include "ResourceManager.h"
 
-dae::RenderComponent::RenderComponent(std::shared_ptr<GameObject> gameObject) : Component(gameObject)
+dae::RenderComponent::RenderComponent(GameObject* gameObject) : Component(gameObject)
 {
 }
 void dae::RenderComponent::Update(float /*deltaTime*/)
@@ -25,14 +25,14 @@ void dae::RenderComponent::SetTexture(const std::string& filename)
 	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
 }
 
-void dae::RenderComponent::SetTexture(std::shared_ptr<Texture2D>* texture)
+void dae::RenderComponent::SetTexture(std::shared_ptr<Texture2D> texture)
 {
-	m_texture = *texture;
+	m_texture = texture;
 }
 
 void dae::RenderComponent::Render() const
 {
-	if (m_pGameObject != nullptr)
+	if (m_pGameObject != nullptr && m_texture != nullptr)
 	{
 		const auto& pos = m_pGameObject->GetTransform()->GetPosition();
 		Renderer::GetInstance().RenderTexture(*m_texture.get(), pos.x, pos.y);

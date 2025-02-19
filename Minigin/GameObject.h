@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <vector>
 #include "Transform.h"
 #include <string>
 #include <list>
@@ -25,14 +26,14 @@ namespace dae
 		bool HasComponent();
 
 		GameObject();
-		~GameObject() = default;
+		~GameObject();
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
 
 	private:
-		std::list<std::unique_ptr<Component>> m_pComponents = std::list<std::unique_ptr<Component>>();
+		std::vector<std::unique_ptr<Component>> m_Components = std::vector<std::unique_ptr<Component>>();
 
 		Transform m_transform{};
 	};
@@ -40,7 +41,7 @@ namespace dae
 	template<typename T>
 	T* dae::GameObject::GetComponent()
 	{
-		for (const std::unique_ptr<Component>& component : m_pComponents)
+		for (const std::unique_ptr<Component>& component : m_Components)
 		{
 			T* castedComponent = dynamic_cast<T*>(component.get());
 

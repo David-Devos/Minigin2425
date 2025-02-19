@@ -2,21 +2,23 @@
 #include <string>
 #include <memory>
 #include "Transform.h"
+#include "Component.h"
 
 namespace dae
 {
 	class Font;
 	class Texture2D;
-	class TextComponent
+	class GameObject;
+	class TextComponent : public Component
 	{
 	public:
-		void Update(float) ;
+		void Update(float) override;
 		void Render() const ;
 
 		void SetText(const std::string& text);
 		void SetPosition(float x, float y);
 
-		TextComponent(const std::string& text, std::shared_ptr<Font> font);
+		TextComponent(const std::string& text, std::shared_ptr<Font> font, GameObject* gameObject);
 		virtual ~TextComponent() = default;
 		TextComponent(const TextComponent& other) = delete;
 		TextComponent(TextComponent&& other) = delete;
