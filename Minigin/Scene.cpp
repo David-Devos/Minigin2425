@@ -35,6 +35,19 @@ void Scene::Update(float deltaTime)
 	}
 }
 
+void dae::Scene::LateUpdate(float deltaTime)
+{
+	for (auto& object : m_objects)
+	{
+		if (object->GetMarkedForDeath())
+		{
+			Remove(object);
+			continue;
+		}
+		object->LateUpdate(deltaTime);
+	}
+}
+
 void Scene::Render() const
 {
 	for (const auto& object : m_objects)

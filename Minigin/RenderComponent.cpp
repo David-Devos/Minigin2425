@@ -15,7 +15,7 @@ void dae::RenderComponent::Render(Texture2D* texture) const
 {
 	if (m_pGameObject != nullptr)
 	{
-		const auto& pos = m_pGameObject->GetTransform()->GetPosition();
+		const auto& pos = m_pGameObject->GetGlobalTransform()->GetPosition();
 		Renderer::GetInstance().RenderTexture(*texture, pos.x, pos.y);
 	}
 }
@@ -34,7 +34,7 @@ void dae::RenderComponent::Render() const
 {
 	if (m_pGameObject != nullptr && m_texture != nullptr)
 	{
-		const auto& pos = m_pGameObject->GetTransform()->GetPosition();
+		const auto& pos = m_pGameObject->GetGlobalTransform()->GetPosition();
 		Renderer::GetInstance().RenderTexture(*m_texture.get(), pos.x, pos.y);
 
 	}

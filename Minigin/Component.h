@@ -13,7 +13,9 @@ namespace dae
 	public:
 		virtual ~Component();
 		virtual void Update(float) = 0;
+		virtual void LateUpdate(float);
 		virtual void Render() const = 0;
+		bool GetMarkedForDeath() const { return m_MarkedForDeath; }
 
 		Component(const Component& other) = delete;
 		Component(Component&& other) = delete;
@@ -22,6 +24,7 @@ namespace dae
 
 	private:
 		Transform* m_pTransform;
+		bool m_MarkedForDeath{ false };
 	};
 
 }
