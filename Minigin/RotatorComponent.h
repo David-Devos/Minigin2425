@@ -6,7 +6,7 @@ namespace dae
 	class RotatorComponent : public dae::Component
 	{
 	public:
-		RotatorComponent(dae::GameObject* gameObject, float rotSpeed, float radius, dae::Transform pivot = Transform{});
+		RotatorComponent(dae::GameObject* gameObject, float rotSpeed, float radius);
 		virtual ~RotatorComponent() = default;
 		void Update(float deltaTime) override;
 		void Render() const override {};
@@ -20,6 +20,7 @@ namespace dae
 		float m_Speed = 180.0f;
 		float m_Radius = 100.0f;
 		dae::Transform m_Pivot;
+		bool parentPivot = false;
 	};
 
 }

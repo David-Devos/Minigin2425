@@ -73,6 +73,15 @@ void dae::GameObject::Render() const
 }
 
 
+void dae::GameObject::SetTransformDirtyFlag()
+{
+	m_posDirtyFlag = true;
+	for (GameObject* go : m_pChildren)
+	{
+		go->SetTransformDirtyFlag();
+	}
+}
+
 void dae::GameObject::SetLocalPosition(float x, float y)
 {
 	m_localTransform.SetPosition(x, y, 0.0f);
@@ -139,6 +148,9 @@ void dae::GameObject::SetParent(GameObject* parent, bool worldPosStays)
 	}
 	else
 	{
+		if (m_pParent != nullptr)
+			m_pParent->RemoveChild(this);
+		m_pParent = nullptr;
 		m_localTransform = m_globalTransform;
 	}
 }

@@ -17,6 +17,7 @@ namespace dae
 		void LateUpdate(float deltaTime);
 		void Render() const;
 
+		void SetTransformDirtyFlag();
 		void SetLocalPosition(float x, float y);
 		void SetGlobalPosition(float x, float y);
 		Transform* GetGlobalTransform();
