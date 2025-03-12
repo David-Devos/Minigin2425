@@ -1,4 +1,5 @@
 #include "Component.h"
+
 namespace dae
 {
 	Component::Component(GameObject* gameObject) : m_pGameObject{ gameObject }

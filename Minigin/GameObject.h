@@ -29,6 +29,7 @@ namespace dae
 		template<typename T>
 		bool HasComponent();
 		bool GetMarkedForDeath() const { return m_MarkedForDeath; }
+		void SetMarkedForDeath() { m_MarkedForDeath = true; }
 		void SetParent(GameObject* parent, bool worldPosStays);
 		GameObject* GetParent() const { return m_pParent; }
 		int GetChildCount() const { return int(m_pChildren.size()); }
@@ -55,24 +56,4 @@ namespace dae
 		bool m_posDirtyFlag{ false };
 	};
 
-	template<typename T>
-	T* dae::GameObject::GetComponent()
-	{
-		for (const std::unique_ptr<Component>& component : m_Components)
-		{
-			T* castedComponent = dynamic_cast<T*>(component.get());
-
-			if (castedComponent != nullptr)
-			{
-				return castedComponent;
-			}
-		}
-		return nullptr;
-	}
-
-	template<typename T>
-	bool dae::GameObject::HasComponent()
-	{
-		return GetComponent<T>() != nullptr;
-	}
 }

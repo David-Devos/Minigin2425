@@ -139,8 +139,8 @@ void dae::GameObject::SetParent(GameObject* parent, bool worldPosStays)
 		{
 			m_localTransform.SetPosition(m_globalTransform.GetPosition() - parent->GetGlobalTransform()->GetPosition());
 			m_posDirtyFlag = true;
-		}	
-		
+		}
+
 		if (m_pParent != nullptr)
 			m_pParent->RemoveChild(this);
 		m_pParent = parent;
@@ -153,4 +153,25 @@ void dae::GameObject::SetParent(GameObject* parent, bool worldPosStays)
 		m_pParent = nullptr;
 		m_localTransform = m_globalTransform;
 	}
+
+}
+template<typename T>
+T* dae::GameObject::GetComponent()
+{
+	for (const std::unique_ptr<Component>& component : m_Components)
+	{
+		T* castedComponent = dynamic_cast<T*>(component.get());
+
+		if (castedComponent != nullptr)
+		{
+			return castedComponent;
+		}
+	}
+	return nullptr;
+}
+
+template<typename T>
+bool dae::GameObject::HasComponent()
+{
+	return GetComponent<T>() != nullptr;
 }
