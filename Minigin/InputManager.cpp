@@ -10,23 +10,27 @@ bool dae::InputManager::ProcessInput()
 			return false;
 		}
 		if (e.type == SDL_KEYDOWN) {
-			
+
 		}
 		if (e.type == SDL_MOUSEBUTTONDOWN) {
-			
+
 		}
 		// ImGui schtuff
 		ImGui_ImplSDL2_ProcessEvent(&e);
 	}
 	for (auto& command : m_Commands)
 	{
+		// NOTE this does not recognise released keys
 		const Uint8* state = SDL_GetKeyboardState(NULL);
 		bool isPressed = state[std::get<1>(command.first)];
 		switch (std::get<0>(command.first))
 		{
 		case KeyState::Down:
 			if (isPressed)
+			{
 				command.second->Execute();
+
+			}
 			break;
 		case KeyState::Up:
 			if (!isPressed)

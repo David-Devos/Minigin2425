@@ -19,7 +19,7 @@ namespace dae
 		float m_Angle = 0.0f;
 		float m_Speed = 180.0f;
 		float m_Radius = 100.0f;
-		dae::Transform m_Pivot;
+		dae::Transform m_Pivot = {};
 		bool parentPivot = false;
 	};
 

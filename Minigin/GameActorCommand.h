@@ -8,8 +8,8 @@ namespace dae
 
 class GameActorCommand : public Command
 {
-	dae::GameObject* m_pActor;
 protected:
+	dae::GameObject* m_pActor;
 	dae::GameObject* GetActor() const { return m_pActor; }
 public:
 	GameActorCommand(dae::GameObject* actor);
@@ -21,7 +21,9 @@ public:
 class MoveCommand final : public GameActorCommand
 {
 public:
-	MoveCommand(dae::GameObject* actor, float moveX, float moveY);
-	float m_MoveX;
-	float m_MoveY;
+	MoveCommand(dae::GameObject* actor, int moveRight, int moveDown);
+	void Execute() override;
+private:
+	int m_MoveRight;
+	int m_MoveDown;
 };
