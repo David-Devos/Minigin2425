@@ -48,12 +48,32 @@ namespace dae
 		void AddChild(GameObject* child);
 
 		GameObject* m_pParent{ nullptr };
-		std::vector<GameObject*> m_pChildren = std::vector<GameObject*>();
-		std::vector<std::unique_ptr<Component>> m_Components = std::vector<std::unique_ptr<Component>>();
+		std::vector<GameObject*> m_pChildren /*= std::vector<GameObject*>()*/;
+		std::vector<std::unique_ptr<Component>> m_Components /*= std::vector<std::unique_ptr<Component>>()*/;
 		bool m_MarkedForDeath{ false };
 		Transform m_globalTransform{};
 		Transform m_localTransform{};
 		bool m_posDirtyFlag{ false };
 	};
 
+}
+template<typename T>
+T* dae::GameObject::GetComponent()
+{
+	for (const std::unique_ptr<Component>& component : m_Components)
+	{
+		T* castedComponent = dynamic_cast<T*>(component.get());
+
+		if (castedComponent != nullptr)
+		{
+			return castedComponent;
+		}
+	}
+	return nullptr;
+}
+
+template<typename T>
+bool dae::GameObject::HasComponent()
+{
+	return GetComponent<T>() != nullptr;
 }

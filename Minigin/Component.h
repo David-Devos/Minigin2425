@@ -3,7 +3,6 @@
 #include "GameObject.h"
 namespace dae
 {
-
 	class Component
 	{
 	protected:

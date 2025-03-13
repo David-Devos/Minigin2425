@@ -1,11 +1,11 @@
 #include "HealthComponent.h"
 
-HealthComponent::HealthComponent(dae::GameObject* gameObject, int health) : Component(gameObject)
+dae::HealthComponent::HealthComponent(dae::GameObject* gameObject, int health) : Component(gameObject)
 , m_Health{ health }
 {
 }
 
-void HealthComponent::TakeDamage(int damage)
+void dae::HealthComponent::TakeDamage(int damage)
 {
 	m_Health -= damage;
 	if (m_Health <= 0)
@@ -14,7 +14,7 @@ void HealthComponent::TakeDamage(int damage)
 	}
 }
 
-int HealthComponent::GetHealth() const
+int dae::HealthComponent::GetHealth() const
 {
 	return m_Health;
 }

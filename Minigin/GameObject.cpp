@@ -7,6 +7,8 @@
 
 dae::GameObject::GameObject()
 {
+	m_pChildren = std::vector<GameObject*>();
+	m_Components = std::vector<std::unique_ptr<Component>>();
 }
 
 dae::GameObject::~GameObject()
@@ -154,24 +156,4 @@ void dae::GameObject::SetParent(GameObject* parent, bool worldPosStays)
 		m_localTransform = m_globalTransform;
 	}
 
-}
-template<typename T>
-T* dae::GameObject::GetComponent()
-{
-	for (const std::unique_ptr<Component>& component : m_Components)
-	{
-		T* castedComponent = dynamic_cast<T*>(component.get());
-
-		if (castedComponent != nullptr)
-		{
-			return castedComponent;
-		}
-	}
-	return nullptr;
-}
-
-template<typename T>
-bool dae::GameObject::HasComponent()
-{
-	return GetComponent<T>() != nullptr;
 }
