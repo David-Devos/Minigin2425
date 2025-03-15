@@ -37,14 +37,14 @@ void Scene::Update(float deltaTime)
 
 void dae::Scene::LateUpdate(float deltaTime)
 {
-	for (auto& object : m_objects)
+	for(size_t i{m_objects.size()-1}; i>0; --i)
 	{
-		if (object->GetMarkedForDeath())
+		if (m_objects[i]->GetMarkedForDeath())
 		{
-			Remove(object);
+			Remove(m_objects[i]);
 			continue;
 		}
-		object->LateUpdate(deltaTime);
+		m_objects[i]->LateUpdate(deltaTime);
 	}
 }
 

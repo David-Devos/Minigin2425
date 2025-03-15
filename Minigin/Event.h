@@ -8,7 +8,8 @@ struct EventArg {
 enum class EventId {
 	// Game event ids here
 	PlayerDied,
-	HealthChanged
+	HealthChanged,
+	PelletEaten
 };
 struct Event {
 	const EventId id;

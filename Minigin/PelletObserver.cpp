@@ -1,7 +1,7 @@
-#include "HealthObserver.h"
+#include "PelletObserver.h"
 #include "TextComponent.h"
 
-dae::HealthObserver::HealthObserver(GameObject* gameObject)
+dae::PelletObserver::PelletObserver(GameObject* gameObject)
 	: Component(gameObject)
 {
 }
@@ -10,21 +10,21 @@ dae::HealthObserver::HealthObserver(GameObject* gameObject)
 // Ik weet dat dit een beeke de bedoeling van de warning level 4 verbrot
 // Maar de warning is fout, want ik gebruik de parameter wel degelijk
 // Aanstaande maandag zal ik dit met u bespreken om te zien waar ik fout loop
-void dae::HealthObserver::Notify(const Event& event, GameObject* actor)
+void dae::PelletObserver::Notify(const Event& event, GameObject* actor)
 {
-	if (event.id == EventId::HealthChanged)
+	if (event.id == EventId::PelletEaten)
 	{
 		// make reference to text component in health observer, so we can change the text
 		TextComponent* textComp = static_cast<TextComponent*>(event.args[0].comp);
-		textComp->SetText("Player Health: " + std::to_string(event.args[0].i));
+		textComp->SetText("Player Score: " + std::to_string(event.args[0].i));
 	}
 }
 #pragma warning(pop)
 
-void dae::HealthObserver::Update(float )
+void dae::PelletObserver::Update(float)
 {
 }
 
-void dae::HealthObserver::Render() const
+void dae::PelletObserver::Render() const
 {
 }

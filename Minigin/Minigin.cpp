@@ -98,6 +98,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		doContinue = input.ProcessInput();
 		//fixed update when needed
 		sceneManager.Update(delta_time);
+		sceneManager.LateUpdate(delta_time);
 		renderer.Render();
 
 		const auto sleep_time = current_time + std::chrono::milliseconds(ms_per_frame) - std::chrono::high_resolution_clock::now();	

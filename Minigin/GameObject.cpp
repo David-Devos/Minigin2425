@@ -54,16 +54,17 @@ void dae::GameObject::LateUpdate(float deltaTime)
 		}
 		m_Components[i]->LateUpdate(deltaTime);
 	}
-	/*
-	for (const std::unique_ptr<Component>& component : m_Components)
+	if (m_MarkedForDeath)
 	{
-		if (component->GetMarkedForDeath())
+		m_Components.clear();
+		m_pChildren.clear();
+		if (m_pParent != nullptr)
 		{
-			RemoveComponent(component);
-			continue;
+			m_pParent->RemoveChild(this);
+			m_pParent = nullptr;
+
 		}
-		component->LateUpdate(deltaTime);
-	}*/
+	}
 }
 
 void dae::GameObject::Render() const

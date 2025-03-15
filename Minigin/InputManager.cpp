@@ -26,7 +26,6 @@ bool dae::InputManager::ProcessInput()
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	for (auto& command : m_Commands)
 	{
-		// NOTE this does not recognise released keys
 		bool wasPressed = false;
 		wasPressed = m_PrevState[std::get<1>(command.first)];
 		bool isPressed = state[std::get<1>(command.first)];
@@ -57,7 +56,6 @@ bool dae::InputManager::ProcessInput()
 	{
 		m_PrevState[i] = state[i];
 	}
-	//memcpy(&m_PrevState, state, SDL_NUM_SCANCODES);
 
 	return true;
 }

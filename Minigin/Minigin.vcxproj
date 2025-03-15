@@ -199,6 +199,8 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="Observer.h" />
+    <ClInclude Include="PelletEatComponent.h" />
+    <ClInclude Include="PelletObserver.h" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="ResourceManager.h" />
@@ -233,6 +235,8 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="Observer.cpp" />
+    <ClCompile Include="PelletEatComponent.cpp" />
+    <ClCompile Include="PelletObserver.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />

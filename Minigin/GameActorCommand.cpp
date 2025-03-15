@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "ControllableComponent.h"
 #include "HealthComponent.h"
+#include "PelletEatComponent.h"
 
 GameActorCommand::GameActorCommand(dae::GameObject* actor) :
 	m_pActor(actor)
@@ -35,4 +36,15 @@ void DamageCommand::Execute()
 {
 	if (m_pActor->HasComponent<dae::HealthComponent>())
 		m_pActor->GetComponent<dae::HealthComponent>()->TakeDamage(1);
+}
+
+PelletEatCommand::PelletEatCommand(dae::GameObject* actor)
+	: GameActorCommand(actor)
+{
+	m_pActor = actor;
+}
+void PelletEatCommand::Execute()
+{
+	if (m_pActor->HasComponent<dae::PelletEatComponent>())
+		m_pActor->GetComponent<dae::PelletEatComponent>()->EatPellet(1);
 }

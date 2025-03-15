@@ -117,6 +117,12 @@
     <ClInclude Include="HealthObserver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PelletObserver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PelletEatComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -210,6 +216,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HealthObserver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PelletObserver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PelletEatComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
