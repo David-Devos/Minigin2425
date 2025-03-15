@@ -1,8 +1,14 @@
 #pragma once
 #include <cstdint>
-struct EventArg {};
+#include "Component.h"
+struct EventArg {
+	int i = 0;
+	dae::Component* comp;
+};
 enum class EventId {
 	// Game event ids here
+	PlayerDied,
+	HealthChanged
 };
 struct Event {
 	const EventId id;

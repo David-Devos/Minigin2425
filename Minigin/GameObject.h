@@ -17,6 +17,7 @@ namespace dae
 		void LateUpdate(float deltaTime);
 		void Render() const;
 
+
 		void SetTransformDirtyFlag();
 		void SetLocalPosition(float x, float y);
 		void SetGlobalPosition(float x, float y);
@@ -48,8 +49,8 @@ namespace dae
 		void AddChild(GameObject* child);
 
 		GameObject* m_pParent{ nullptr };
-		std::vector<GameObject*> m_pChildren /*= std::vector<GameObject*>()*/;
-		std::vector<std::unique_ptr<Component>> m_Components /*= std::vector<std::unique_ptr<Component>>()*/;
+		std::vector<GameObject*> m_pChildren;
+		std::vector<std::unique_ptr<Component>> m_Components;
 		bool m_MarkedForDeath{ false };
 		Transform m_globalTransform{};
 		Transform m_localTransform{};

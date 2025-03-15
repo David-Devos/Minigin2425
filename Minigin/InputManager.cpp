@@ -1,7 +1,12 @@
 #include <SDL.h>
+#include <algorithm> 
 #include "InputManager.h"
 #include <backends/imgui_impl_sdl2.h>
+#include <iostream>
 
+dae::InputManager::InputManager() {
+	m_PrevState.resize(SDL_NUM_SCANCODES);
+}
 bool dae::InputManager::ProcessInput()
 {
 	SDL_Event e;
@@ -18,10 +23,12 @@ bool dae::InputManager::ProcessInput()
 		// ImGui schtuff
 		ImGui_ImplSDL2_ProcessEvent(&e);
 	}
+	const Uint8* state = SDL_GetKeyboardState(NULL);
 	for (auto& command : m_Commands)
 	{
 		// NOTE this does not recognise released keys
-		const Uint8* state = SDL_GetKeyboardState(NULL);
+		bool wasPressed = false;
+		wasPressed = m_PrevState[std::get<1>(command.first)];
 		bool isPressed = state[std::get<1>(command.first)];
 		switch (std::get<0>(command.first))
 		{
@@ -36,8 +43,21 @@ bool dae::InputManager::ProcessInput()
 			if (!isPressed)
 				command.second->Execute();
 			break;
+		case KeyState::Tapped:
+			if (!wasPressed && isPressed)
+				command.second->Execute();
+			break;
+		case KeyState::Released:
+			if (wasPressed && !isPressed)
+				command.second->Execute();
+			break;
 		}
 	}
+	for (int i = 0; i < SDL_NUM_SCANCODES; i++)
+	{
+		m_PrevState[i] = state[i];
+	}
+	//memcpy(&m_PrevState, state, SDL_NUM_SCANCODES);
 
 	return true;
 }
