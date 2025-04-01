@@ -33,9 +33,6 @@ class DamageCommand final : public GameActorCommand
 public:
 	DamageCommand(dae::GameObject* actor);
 	void Execute() override;
-private:
-	int m_MoveRight;
-	int m_MoveDown;
 };
 
 class PelletEatCommand final : public GameActorCommand
@@ -43,7 +40,4 @@ class PelletEatCommand final : public GameActorCommand
 public:
 	PelletEatCommand(dae::GameObject* actor);
 	void Execute() override;
-private:
-	int m_MoveRight;
-	int m_MoveDown;
 };
