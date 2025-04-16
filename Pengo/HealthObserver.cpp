@@ -1,16 +1,12 @@
 #include "HealthObserver.h"
 #include "TextComponent.h"
+#include "Event.h"
 
 dae::HealthObserver::HealthObserver(GameObject* gameObject)
 	: Component(gameObject)
 {
 }
-#pragma warning(push)
-#pragma warning(disable : 4100) // Disable warning for unreferenced formal parameter
-// Ik weet dat dit een beeke de bedoeling van de warning level 4 verbrot
-// Maar de warning is fout, want ik gebruik de parameter wel degelijk
-// Aanstaande maandag zal ik dit met u bespreken om te zien waar ik fout loop
-void dae::HealthObserver::Notify(const Event& event, GameObject* actor)
+void dae::HealthObserver::Notify(const Event& event, GameObject*)
 {
 	if (event.id == EventId::HealthChanged)
 	{
@@ -19,7 +15,6 @@ void dae::HealthObserver::Notify(const Event& event, GameObject* actor)
 		textComp->SetText("Player Health: " + std::to_string(event.args[0].i));
 	}
 }
-#pragma warning(pop)
 
 void dae::HealthObserver::Update(float )
 {

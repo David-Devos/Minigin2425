@@ -1,4 +1,5 @@
 #include "HealthComponent.h"
+#include "Event.h"
 
 dae::HealthComponent::HealthComponent(dae::GameObject* gameObject, int health, TextComponent* textComp) : Component(gameObject)
 , m_Health{ health }, m_pTextComponent{ textComp }

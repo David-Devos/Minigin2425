@@ -1,4 +1,4 @@
-#include <SDL.h>
+
 #include <algorithm> 
 #include "InputManager.h"
 #include <backends/imgui_impl_sdl2.h>

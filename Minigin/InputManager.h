@@ -4,6 +4,7 @@
 #include <map>
 #include <memory>
 #include <vector>
+#include <SDL.h>
 
 namespace dae
 {

@@ -1,5 +1,6 @@
 #include "PelletObserver.h"
 #include "TextComponent.h"
+#include "Event.h"
 
 dae::PelletObserver::PelletObserver(GameObject* gameObject)
 	: Component(gameObject)

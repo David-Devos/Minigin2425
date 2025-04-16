@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
 #include "Observer.h"
-#include "Event.h"
 namespace dae
 {
+	struct Event;
 	class Subject
 	{
 	public:

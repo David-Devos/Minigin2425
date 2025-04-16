@@ -1,4 +1,5 @@
 #include "PelletEatComponent.h"
+#include "Event.h"
 
 dae::PelletEatComponent::PelletEatComponent(dae::GameObject* gameObject, int health, TextComponent* textComp) : Component(gameObject)
 , m_Score{ health }, m_pTextComponent{ textComp }
