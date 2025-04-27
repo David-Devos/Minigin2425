@@ -2,6 +2,7 @@
 #include "HealthComponent.h"
 #include "PelletEatComponent.h"
 #include "ControllableComponent.h"
+#include <ServiceLocator.h>
 
 MoveCommand::MoveCommand(dae::GameObject* actor, int moveRight, int moveDown) :
 	GameActorCommand(actor),
@@ -37,4 +38,16 @@ void PelletEatCommand::Execute()
 {
 	if (m_pActor->HasComponent<dae::PelletEatComponent>())
 		m_pActor->GetComponent<dae::PelletEatComponent>()->EatPellet(1);
+}
+
+TempSoundCommand::TempSoundCommand(dae::GameObject* actor)
+	: GameActorCommand(actor)
+{
+	m_pActor = actor;
+}
+
+void TempSoundCommand::Execute()
+{
+	auto& ss = dae::ServiceLocator::GetSoundSystem();
+	ss.playSound(0, 10);
 }

@@ -140,6 +140,7 @@ void load()
 
 	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_K, std::make_unique<DamageCommand>(player1Obj.get()));
 	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_I, std::make_unique<PelletEatCommand>(player1Obj.get()));
+	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_G, std::make_unique<TempSoundCommand>(player1Obj.get()));
 
 
 

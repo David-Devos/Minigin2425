@@ -24,3 +24,10 @@ public:
 	PelletEatCommand(dae::GameObject* actor);
 	void Execute() override;
 };
+//temporary command for testing
+class TempSoundCommand final : public GameActorCommand
+{
+public:
+	TempSoundCommand(dae::GameObject* actor);
+	void Execute() override;
+};
