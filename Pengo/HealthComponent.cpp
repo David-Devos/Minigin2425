@@ -1,5 +1,6 @@
 #include "HealthComponent.h"
 #include "Event.h"
+#include <ServiceLocator.h>
 
 dae::HealthComponent::HealthComponent(dae::GameObject* gameObject, int health, TextComponent* textComp) : Component(gameObject)
 , m_Health{ health }, m_pTextComponent{ textComp }
@@ -25,6 +26,8 @@ void dae::HealthComponent::TakeDamage(int damage)
 	Notify(event, m_pGameObject);
 	if (m_Health <= 0)
 	{
+		auto& ss = dae::ServiceLocator::GetSoundSystem();
+		ss.playSound(0, 10);
 		m_pGameObject->SetMarkedForDeath();
 	}
 }

@@ -1,11 +1,9 @@
 #include "SoundSystem.h"
-#include <SDL_mixer.h>
-#include <cassert>
-#include <iostream>
-#include <filesystem>
-#include "ResourceManager.h"
 #include <SDL.h>
+#include <SDL_mixer.h>
 #include <regex>
+#include <iostream>
+#include "ResourceManager.h"
 namespace dae
 {
 	// SDL Sound System
@@ -50,21 +48,20 @@ namespace dae
 	}
 	void SDLSoundSystem::loadSound(const std::string& filePath, unsigned int id)
 	{
-		const auto filename = std::filesystem::path(filePath).filename().string();
-
 		if (m_pChunks.contains(id) || m_pMusic.contains(id))
 		{
 			std::cerr << "Sound ID already exists: " << id << std::endl;
 			return;
 		}
 
-		static const std::regex pattern(R"(\.(wav|mp3)$)", std::regex::icase);
-		if (std::regex_match(filename, pattern))
+		static const std::regex patternWAV(R"(.*\.wav)", std::regex::icase);
+		static const std::regex patternMP3(R"(.*\.mp3)", std::regex::icase);
+		if (std::regex_match(filePath, patternMP3))
 		{
 			m_pMusic[id] = std::make_unique<Mix_Music*>(Mix_LoadMUS(filePath.c_str()));
 			return;
 		}
-		else
+		else if (std::regex_match(filePath, patternWAV))
 		{
 			m_pChunks[id] = std::make_unique<Mix_Chunk*>(Mix_LoadWAV(filePath.c_str()));
 			return;

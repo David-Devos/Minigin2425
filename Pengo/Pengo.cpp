@@ -32,8 +32,10 @@ void load()
 		std::make_unique<dae::SDLSoundSystem>());
 
 	auto& ss = dae::ServiceLocator::GetSoundSystem();
+	//for now when and where sounds are loaded, are ill handled
 	ss.loadSound("../Data/Explosion.wav", 0);
-	ss.playSound(0, 10);
+	ss.loadSound("../Data/PengoTheme.mp3", 1);
+	ss.playSound(1, 10);
 
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
@@ -95,6 +97,9 @@ void load()
 	howToPlay->AddComponent(std::move(textComponent));
 	textComponent = std::make_unique<dae::TextComponent>("P2 WASD movement, L to take damage, O to eat pellets", font, howToPlay.get());
 	textComponent->SetPosition(0, 120);
+	howToPlay->AddComponent(std::move(textComponent));
+	textComponent = std::make_unique<dae::TextComponent>("Press G to test soundeffect or make a player die", font, howToPlay.get());
+	textComponent->SetPosition(0, 140);
 	howToPlay->AddComponent(std::move(textComponent));
 	scene.Add(howToPlay);
 
