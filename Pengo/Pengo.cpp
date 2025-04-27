@@ -22,9 +22,19 @@
 #include "HealthObserver.h"
 #include "PelletObserver.h"
 #include "PelletEatComponent.h"
+#include <ServiceLocator.h>
 
 void load()
 {
+//#if _DEBUG
+	//encapsulate in logging sound system in debug using macros
+	dae::ServiceLocator::RegisterSoundSystem(
+		std::make_unique<dae::SDLSoundSystem>());
+
+	auto& ss = dae::ServiceLocator::GetSoundSystem();
+	ss.loadSound("../Data/Explosion.wav", 0);
+	ss.playSound(0, 10);
+
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
 	auto background = std::make_shared<dae::GameObject>();
@@ -175,6 +185,8 @@ void load()
 
 	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_L, std::make_unique<DamageCommand>(player2Obj.get()));
 	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_O, std::make_unique<PelletEatCommand>(player2Obj.get()));
+	
+	
 }
 
 int main(int, char* []) {
