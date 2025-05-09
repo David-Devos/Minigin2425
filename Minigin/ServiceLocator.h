@@ -1,11 +1,14 @@
-#pragma once
-#include <memory>
-#include "SoundSystem.h"
+#pragma once  
+#include <memory>  
+#include "SoundSystem.h"  
+
 namespace dae
 {
 	class ServiceLocator final
 	{
-		static std::unique_ptr<SoundSystem> m_pSSInstance ;
+		static std::unique_ptr<SoundSystem> m_pSSInstance;
+		static std::unique_ptr<NullSoundSystem> m_pNullSSInstance;
+
 	public:
 		ServiceLocator() = default;
 		~ServiceLocator() = default;
@@ -16,11 +19,14 @@ namespace dae
 
 		static SoundSystem& GetSoundSystem()
 		{
-			return *m_pSSInstance;
+			return m_pSSInstance.get() == nullptr ? *m_pNullSSInstance.get() : *m_pSSInstance.get();
 		}
+
 		static void RegisterSoundSystem(std::unique_ptr<SoundSystem>&& pSSInstance)
 		{
-			m_pSSInstance = std::move(pSSInstance);
+			if(pSSInstance != nullptr)
+				m_pSSInstance = std::move(pSSInstance);
 		}
 	};
 }
+

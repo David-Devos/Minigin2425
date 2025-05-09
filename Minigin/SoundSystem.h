@@ -20,23 +20,25 @@ namespace dae
 		/*void Initialize();
 		void Shutdown();
 		void Update();*/
-		virtual void playSound(unsigned int id, const int volume) = 0;
 		virtual void stopSound() = 0;
 		virtual void loadSound(const std::string& filePath, unsigned int id) = 0;
+		virtual void playSound(unsigned int id, const int volume) = 0;
+	private:
 	};
-	class DefaultSoundSystem final : public SoundSystem
+	class NullSoundSystem final : public SoundSystem
 	{
 	public:
-		DefaultSoundSystem() = default;
-		~DefaultSoundSystem() override = default;
-		DefaultSoundSystem(const DefaultSoundSystem&) = delete;
-		DefaultSoundSystem(DefaultSoundSystem&&) = delete;
-		DefaultSoundSystem& operator=(const DefaultSoundSystem&) = delete;
-		DefaultSoundSystem& operator=(DefaultSoundSystem&&) = delete;
+		NullSoundSystem() = default;
+		~NullSoundSystem() override = default;
+		NullSoundSystem(const NullSoundSystem&) = delete;
+		NullSoundSystem(NullSoundSystem&&) = delete;
+		NullSoundSystem& operator=(const NullSoundSystem&) = delete;
+		NullSoundSystem& operator=(NullSoundSystem&&) = delete;
 
-		void playSound(unsigned int , const int ) override {};
 		void stopSound() override {}
 		void loadSound(const std::string& , unsigned int ) override {};
+		void playSound(unsigned int , const int ) override {};
+	private:
 	};
 
 	class SDLSoundSystem final : public SoundSystem
@@ -50,7 +52,11 @@ namespace dae
 		std::mutex m_Mutex{};
 		std::jthread m_Thread{};
 		// id, volume, loops
-		std::deque<std::tuple<unsigned int, int, int>> m_Queue{};
+		std::deque<std::tuple<unsigned int, int, int>> m_PlayQueue{};
+		std::deque<std::tuple<unsigned int, std::string>> m_LoadQueue{};
+		void playSoundFromQueue(unsigned int id, const int volume);
+		void loadSoundFromQueue(const std::string& filePath, unsigned int id);
+
 	public:
 		SDLSoundSystem();
 		~SDLSoundSystem() override = default;
@@ -80,6 +86,6 @@ namespace dae
 		void playSound(unsigned int id, const int volume) override;
 		void stopSound() override;
 	private:
-		std::unique_ptr<SoundSystem> m_pSoundSystem{ std::make_unique<DefaultSoundSystem>() };
+		std::unique_ptr<SoundSystem> m_pSoundSystem{ std::make_unique<NullSoundSystem>() };
 	};
 }

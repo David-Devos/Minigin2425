@@ -36,7 +36,7 @@ void load()
 	ss.loadSound("../Data/Explosion.wav", 0);
 	ss.loadSound("../Data/PengoTheme.mp3", 1);
 	ss.playSound(1, 10);
-
+	
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
 	auto background = std::make_shared<dae::GameObject>();

@@ -13,7 +13,7 @@ namespace dae
 		Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096);
 		m_Thread = std::jthread(&SDLSoundSystem::doQueue, this);
 	}
-	void SDLSoundSystem::playSound(unsigned int id, const int volume)
+	void SDLSoundSystem::playSoundFromQueue(unsigned int id, const int volume)
 	{
 		if (m_pChunks.contains(id))
 		{
@@ -46,7 +46,7 @@ namespace dae
 	{
 		Mix_HaltChannel(-1);
 	}
-	void SDLSoundSystem::loadSound(const std::string& filePath, unsigned int id)
+	void SDLSoundSystem::loadSoundFromQueue(const std::string& filePath, unsigned int id)
 	{
 		if (m_pChunks.contains(id) || m_pMusic.contains(id))
 		{
@@ -70,19 +70,39 @@ namespace dae
 	void SDLSoundSystem::doQueue()
 	{
 		std::unique_lock<std::mutex> lock(m_Mutex);
-		while (!m_Queue.empty())
+		while (true)
 		{
-			auto [id, volume, loops] = m_Queue.front();
-			m_Queue.pop_front();
-			lock.unlock();
-			playSound(id, volume);
-			lock.lock();
+			while (!m_LoadQueue.empty())
+			{
+				auto [id, filePath] = m_LoadQueue.front();
+				m_LoadQueue.pop_front();
+				lock.unlock();
+				loadSoundFromQueue(filePath, id);
+				lock.lock();
+			}
+			while (!m_PlayQueue.empty())
+			{
+				auto [id, volume, loops] = m_PlayQueue.front();
+				m_PlayQueue.pop_front();
+				lock.unlock();
+				playSoundFromQueue(id, volume);
+				lock.lock();
+			}
 		}
+	}
+
+	void SDLSoundSystem::playSound(unsigned int id, const int volume)
+	{
+		m_PlayQueue.push_back(std::tuple<unsigned int, int, int>(id, volume, 0));
+	}
+	void SDLSoundSystem::loadSound(const std::string& filePath, unsigned int id)
+	{
+		m_LoadQueue.push_back(std::tuple<unsigned int, std::string>(id, filePath));
 	}
 
 
 
-
+	
 	// Debug Sound System
 	void DebugSoundSystem::playSound(unsigned int id, const int volume)
 	{
