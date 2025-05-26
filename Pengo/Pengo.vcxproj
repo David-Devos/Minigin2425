@@ -176,6 +176,8 @@
     <ClCompile Include="PelletObserver.cpp" />
     <ClCompile Include="Pengo.cpp" />
     <ClCompile Include="RotatorComponent.cpp" />
+    <ClCompile Include="StateComponent.cpp" />
+    <ClCompile Include="StateMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ControllableComponent.h" />
@@ -187,6 +189,8 @@
     <ClInclude Include="PelletEatComponent.h" />
     <ClInclude Include="PelletObserver.h" />
     <ClInclude Include="RotatorComponent.h" />
+    <ClInclude Include="StateComponent.h" />
+    <ClInclude Include="StateMachine.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />

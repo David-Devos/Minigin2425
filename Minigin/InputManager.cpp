@@ -19,8 +19,9 @@ bool dae::InputManager::ProcessInput()
 		}
 		if (e.type == SDL_MOUSEBUTTONDOWN) {
 
+
+			// ImGui schtuff
 		}
-		// ImGui schtuff
 		ImGui_ImplSDL2_ProcessEvent(&e);
 	}
 	const Uint8* state = SDL_GetKeyboardState(NULL);
@@ -69,3 +70,4 @@ void dae::InputManager::UnbindCommand(KeyState controllerButton, SDL_Scancode ke
 {
 	m_Commands.erase(std::make_tuple(controllerButton, key));
 }
+

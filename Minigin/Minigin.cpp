@@ -51,11 +51,11 @@ dae::Minigin::Minigin(const std::string &dataPath)
 	}
 
 	g_window = SDL_CreateWindow(
-		"Programming 4 assignment",
+		"Pengo",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		640,
-		480,
+		448,
+		512,
 		SDL_WINDOW_OPENGL
 	);
 	if (g_window == nullptr) 

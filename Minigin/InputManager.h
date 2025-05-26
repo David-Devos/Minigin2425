@@ -22,6 +22,7 @@ namespace dae
 		bool ProcessInput();
 		void BindCommand(KeyState controllerButton,SDL_Scancode key,std::unique_ptr<Command> command);
 		void UnbindCommand(KeyState controllerButton, SDL_Scancode key);
+		std::vector<Uint8> GetPrevState() const { return m_PrevState; }
 	private:
 		std::vector<Uint8> m_PrevState;
 		std::map<std::tuple<KeyState, SDL_Scancode>, std::unique_ptr<Command>> m_Commands;

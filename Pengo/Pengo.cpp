@@ -23,6 +23,8 @@
 #include "PelletObserver.h"
 #include "PelletEatComponent.h"
 #include <ServiceLocator.h>
+#include "StateComponent.h"
+#include "StateMachine.h"
 
 void load()
 {
@@ -41,56 +43,21 @@ void load()
 
 	auto background = std::make_shared<dae::GameObject>();
 	background->AddComponent(std::make_unique<dae::RenderComponent>(background.get()));
-	background->GetComponent<dae::RenderComponent>()->SetTexture("background.tga");
-	////go->SetTexture("background.tga");
+	background->GetComponent<dae::RenderComponent>()->SetTexture("EmptyMap.png");
 	scene.Add(background);
 
-	auto logo = std::make_shared<dae::GameObject>();
-	logo->SetGlobalPosition(216, 180);
-	logo->AddComponent(std::make_unique<dae::RenderComponent>(logo.get()));
-	logo->GetComponent<dae::RenderComponent>()->SetTexture("logo.tga");
-	//go->SetTexture("logo.tga");
-	//go->SetPosition(216, 180);
-	scene.Add(logo);
-
-	auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	auto title = std::make_shared<dae::GameObject>();
-	title->SetGlobalPosition(80, 20);
-	title->AddComponent(std::make_unique<dae::TextComponent>("Programming 4 Assignment", font, title.get()));
-	//to->SetPosition(80, 20);
-	scene.Add(title);
-
+	// We'll keep the fps counter for now
+	auto font = dae::ResourceManager::GetInstance().LoadFont("pengo-arcade.otf", 36);
 	auto fps = std::make_shared<dae::GameObject>();
-
 	auto fpsTextComponent = std::make_unique<dae::TextComponent>("0 FPS", font, fps.get());
 
 	fps->AddComponent(std::move(fpsTextComponent));
 	fps->AddComponent(std::make_unique<dae::FpsComponent>(fps->GetComponent<dae::TextComponent>(), fps.get()));
 	scene.Add(fps);
 
-	//Rotators
-	auto sunObj = std::make_shared<dae::GameObject>();
-	sunObj->SetGlobalPosition(300, 200);
-	sunObj->AddComponent(std::make_unique<dae::RenderComponent>(sunObj.get()));
-	sunObj->GetComponent<dae::RenderComponent>()->SetTexture("sun.png");
-	scene.Add(sunObj);
-
-	auto earthObj = std::make_shared<dae::GameObject>();
-	earthObj->SetParent(sunObj.get(), true);
-	earthObj->AddComponent(std::make_unique<dae::RenderComponent>(earthObj.get()));
-	earthObj->GetComponent<dae::RenderComponent>()->SetTexture("earth.png");
-	earthObj->AddComponent(std::make_unique<dae::RotatorComponent>(earthObj.get(), 3.f, 100.f));
-	scene.Add(earthObj);
-
-	auto moonObj = std::make_shared<dae::GameObject>();
-	moonObj->SetParent(earthObj.get(), true);
-	moonObj->AddComponent(std::make_unique<dae::RenderComponent>(moonObj.get()));
-	moonObj->GetComponent<dae::RenderComponent>()->SetTexture("moon.png");
-	moonObj->AddComponent(std::make_unique<dae::RotatorComponent>(moonObj.get(), -7.f, 40.f));
-	scene.Add(moonObj);
 
 	//tutorial
-	font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 12);
+	font = dae::ResourceManager::GetInstance().LoadFont("pengo-arcade.otf", 12);
 	auto howToPlay = std::make_shared<dae::GameObject>();
 	auto textComponent = std::make_unique<dae::TextComponent>("P1 arrows movement, K to take damage, I to eat pellets", font, howToPlay.get());
 	textComponent->SetPosition(0, 100);
@@ -113,7 +80,7 @@ void load()
 	//Player1
 	auto player1Obj = std::make_shared<dae::GameObject>();
 	player1Obj->AddComponent(std::make_unique<dae::RenderComponent>(player1Obj.get()));
-	player1Obj->GetComponent<dae::RenderComponent>()->SetTexture("Player1Icon.png");
+	player1Obj->GetComponent<dae::RenderComponent>()->SetTexture("Pengo1.png");
 	player1Obj->AddComponent(std::make_unique<dae::ControllableComponent>(player1Obj.get(), 100.f));
 	player1Obj->SetLocalPosition(300, 200);
 	player1Obj->SetGlobalPosition(300, 200);
@@ -137,6 +104,13 @@ void load()
 	scene.Add(healthDisplayObj);
 	scene.Add(scoreDisplayObj);
 
+	//Debug
+	auto debugObj = std::make_shared<dae::GameObject>();
+	auto debugStateComp = std::make_unique<dae::StateComponent>(debugObj.get());
+	debugObj->AddComponent(std::move(debugStateComp));
+	scene.Add(debugObj);
+	debugObj->GetComponent<dae::StateComponent>()->SetState(std::make_shared<dae::StandingState>());
+
 	//Input
 	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_UP, std::make_unique<MoveCommand>(player1Obj.get(), 0, -1));
 	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_DOWN, std::make_unique<MoveCommand>(player1Obj.get(), 0, 1));
@@ -152,14 +126,13 @@ void load()
 	//UI
 	healthDisplayObj = std::make_shared<dae::GameObject>();
 	scoreDisplayObj = std::make_shared<dae::GameObject>();
-	font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 12);
 	healthTextComponent = std::make_unique<dae::TextComponent>("Player Health: " + std::to_string(playerHP), font, healthDisplayObj.get());
 	scoreTextComponent = std::make_unique<dae::TextComponent>("Player Score: 0", font, scoreDisplayObj.get());
 
-	//Player1
+	//Player2
 	auto player2Obj = std::make_shared<dae::GameObject>();
 	player2Obj->AddComponent(std::make_unique<dae::RenderComponent>(player2Obj.get()));
-	player2Obj->GetComponent<dae::RenderComponent>()->SetTexture("Player2Icon.png");
+	player2Obj->GetComponent<dae::RenderComponent>()->SetTexture("Pengo2.png");
 	player2Obj->AddComponent(std::make_unique<dae::ControllableComponent>(player2Obj.get(), 100.f));
 	player2Obj->SetLocalPosition(300, 200);
 	player2Obj->SetGlobalPosition(300, 200);
