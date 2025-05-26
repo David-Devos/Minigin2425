@@ -18,7 +18,7 @@ namespace dae
 	{
 		auto& inputManager = InputManager::GetInstance();
 		const auto& prevState = inputManager.GetPrevState();
-		if (prevState[SDL_SCANCODE_UP] || 
+		if (prevState[SDL_SCANCODE_UP] ||
 			prevState[SDL_SCANCODE_DOWN] || 
 			prevState[SDL_SCANCODE_LEFT] || 
 			prevState[SDL_SCANCODE_RIGHT]) {
@@ -66,6 +66,7 @@ namespace dae
 	}
 	void RunningState::OnEnter()
 	{
+		// weeral inloaden... tzelfde voor de rest
 	}
 	void RunningState::OnExit()
 	{
@@ -75,12 +76,12 @@ namespace dae
 	std::shared_ptr<PlayerStateMachine> PushingState::HandleInput()
 	{
 		return nullptr;
-
 	}
 
 	void PushingState::Update()
 	{
-
+		// meet hier wanneer de push gedaan is, om dan in de handle input te checken of et naar running of idle moet gaan
+		//(duidt er ook op dak ben vergeten deltatime in de update te passen...)
 	}
 	void PushingState::OnEnter()
 	{
@@ -92,8 +93,8 @@ namespace dae
 	//dying state
 	std::shared_ptr<PlayerStateMachine> DyingState::HandleInput()
 	{
-		return nullptr;
 
+		return nullptr;
 	}
 
 	void DyingState::Update()
@@ -105,5 +106,7 @@ namespace dae
 	}
 	void DyingState::OnExit()
 	{
+		// deleten van de player naar hier verplaatsen zodat het nog de death animation kan vervolledigen?
+		// beter gezegd, semi resetten van de game
 	}
 }

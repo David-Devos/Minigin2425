@@ -19,8 +19,7 @@ namespace dae
 		BaseStateMachine(BaseStateMachine&& other) = default;
 		BaseStateMachine& operator=(const BaseStateMachine& other) = default;
 		BaseStateMachine& operator=(BaseStateMachine&& other) = default;
-
-		virtual std::shared_ptr<PlayerStateMachine> HandleInput() = 0;
+		// geen handle input, want dat is playerstate uniek
 		virtual void Update() = 0;
 	};
 
@@ -36,6 +35,7 @@ namespace dae
 		virtual void Update() override {};
 		virtual void OnEnter() {};
 		virtual void OnExit() {};
+		virtual std::shared_ptr<PlayerStateMachine> HandleInput() = 0;
 	protected:
 		std::unique_ptr<StateComponent> m_pPlayer;
 	};
