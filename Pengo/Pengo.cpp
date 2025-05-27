@@ -23,13 +23,14 @@
 #include "PelletObserver.h"
 #include "PelletEatComponent.h"
 #include <ServiceLocator.h>
+#include <glm.hpp>
 #include "StateComponent.h"
 #include "StateMachine.h"
 
 void load()
 {
-//#if _DEBUG
-	//encapsulate in logging sound system in debug using macros
+	//#if _DEBUG
+		//encapsulate in logging sound system in debug using macros
 	dae::ServiceLocator::RegisterSoundSystem(
 		std::make_unique<dae::SDLSoundSystem>());
 
@@ -38,7 +39,7 @@ void load()
 	ss.loadSound("../Data/Explosion.wav", 0);
 	ss.loadSound("../Data/PengoTheme.mp3", 1);
 	ss.playSound(1, 10);
-	
+
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
 	auto background = std::make_shared<dae::GameObject>();
@@ -112,10 +113,10 @@ void load()
 	debugObj->GetComponent<dae::StateComponent>()->SetState(std::make_shared<dae::StandingState>());
 
 	//Input
-	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_UP, std::make_unique<MoveCommand>(player1Obj.get(), 0, -1));
-	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_DOWN, std::make_unique<MoveCommand>(player1Obj.get(), 0, 1));
-	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_LEFT, std::make_unique<MoveCommand>(player1Obj.get(), -1, 0));
-	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_RIGHT, std::make_unique<MoveCommand>(player1Obj.get(), 1, 0));
+	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_UP, std::make_unique<MoveCommand>(player1Obj.get(), glm::vec2{ 0,-1 }));
+	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_DOWN, std::make_unique<MoveCommand>(player1Obj.get(), glm::vec2{ 0,1 }));
+	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_LEFT, std::make_unique<MoveCommand>(player1Obj.get(), glm::vec2{ -1,0 }));
+	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_RIGHT, std::make_unique<MoveCommand>(player1Obj.get(), glm::vec2{ 1,0 }));
 
 	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_K, std::make_unique<DamageCommand>(player1Obj.get()));
 	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_I, std::make_unique<PelletEatCommand>(player1Obj.get()));
@@ -157,15 +158,15 @@ void load()
 	scene.Add(scoreDisplayObj);
 
 	//Input
-	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_W, std::make_unique<MoveCommand>(player2Obj.get(), 0, -1));
-	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_S, std::make_unique<MoveCommand>(player2Obj.get(), 0, 1));
-	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_A, std::make_unique<MoveCommand>(player2Obj.get(), -1, 0));
-	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_D, std::make_unique<MoveCommand>(player2Obj.get(), 1, 0));
+	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_W, std::make_unique<MoveCommand>(player2Obj.get(), glm::vec2{ 0,-1 }));
+	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_S, std::make_unique<MoveCommand>(player2Obj.get(), glm::vec2{ 0,1 }));
+	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_A, std::make_unique<MoveCommand>(player2Obj.get(), glm::vec2{ -1,0 }));
+	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_D, std::make_unique<MoveCommand>(player2Obj.get(), glm::vec2{ 1,0 }));
 
 	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_L, std::make_unique<DamageCommand>(player2Obj.get()));
 	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_O, std::make_unique<PelletEatCommand>(player2Obj.get()));
-	
-	
+
+
 }
 
 int main(int, char* []) {

@@ -1,14 +1,14 @@
 #pragma once
+#include <glm.hpp>
 #include "GameActorCommand.h"
 
 class MoveCommand final : public GameActorCommand
 {
 public:
-	MoveCommand(dae::GameObject* actor, int moveRight, int moveDown);
+	MoveCommand(dae::GameObject* actor, glm::vec2 moveDir);
 	void Execute() override;
 private:
-	int m_MoveRight;
-	int m_MoveDown;
+	glm::vec2 m_MoveDir;
 };
 
 class DamageCommand final : public GameActorCommand

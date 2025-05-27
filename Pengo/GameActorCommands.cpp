@@ -4,17 +4,16 @@
 #include "ControllableComponent.h"
 #include <ServiceLocator.h>
 
-MoveCommand::MoveCommand(dae::GameObject* actor, int moveRight, int moveDown) :
+MoveCommand::MoveCommand(dae::GameObject* actor, glm::vec2 moveDir) :
 	GameActorCommand(actor),
-	m_MoveRight(moveRight),
-	m_MoveDown(moveDown)
+	m_MoveDir(moveDir)
 {
 }
 
 void MoveCommand::Execute()
 {
 	if (m_pActor->HasComponent<dae::ControllableComponent>())
-		m_pActor->GetComponent<dae::ControllableComponent>()->AddDirection(glm::vec3{ m_MoveRight, m_MoveDown,0 });
+		m_pActor->GetComponent<dae::ControllableComponent>()->AddDirection(glm::vec3{ m_MoveDir.x, m_MoveDir.y,0 });
 }
 
 DamageCommand::DamageCommand(dae::GameObject* actor) :

@@ -61,13 +61,13 @@ bool dae::InputManager::ProcessInput()
 	return true;
 }
 
-void dae::InputManager::BindCommand(KeyState controllerButton, SDL_Scancode key, std::unique_ptr<Command> command)
+void dae::InputManager::BindCommand(KeyState stateOfButton, SDL_Scancode key, std::unique_ptr<Command> command)
 {
-	m_Commands[std::make_tuple(controllerButton, key)] = std::move(command);
+	m_Commands[std::make_tuple(stateOfButton, key)] = std::move(command);
 }
 
-void dae::InputManager::UnbindCommand(KeyState controllerButton, SDL_Scancode key)
+void dae::InputManager::UnbindCommand(KeyState stateOfButton, SDL_Scancode key)
 {
-	m_Commands.erase(std::make_tuple(controllerButton, key));
+	m_Commands.erase(std::make_tuple(stateOfButton, key));
 }
 
