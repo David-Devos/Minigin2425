@@ -48,8 +48,8 @@ namespace dae
 	{
 		auto& inputManager = InputManager::GetInstance();
 		const auto& prevState = inputManager.GetPrevState();
-		if (!prevState[SDL_SCANCODE_UP] &&
-			!prevState[SDL_SCANCODE_DOWN] &&
+		if (!prevState[SDL_SCANCODE_UP] && // Dus al dit zou in essentie vervangen worden met een call naar de inputmanager
+			!prevState[SDL_SCANCODE_DOWN] && // die de juist action opvraagd die dan zelf deze sdl_scancodes zou checken?
 			!prevState[SDL_SCANCODE_LEFT] &&
 			!prevState[SDL_SCANCODE_RIGHT]) {
 			return PlayerStateMachine::standing;

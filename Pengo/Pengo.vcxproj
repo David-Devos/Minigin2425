@@ -167,6 +167,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Actions.cpp" />
     <ClCompile Include="ControllableComponent.cpp" />
     <ClCompile Include="FpsComponent.cpp" />
     <ClCompile Include="GameActorCommands.cpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="StateMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Actions.h" />
     <ClInclude Include="ControllableComponent.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="FpsComponent.h" />
