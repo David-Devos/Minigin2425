@@ -24,7 +24,7 @@
 #include "PelletEatComponent.h"
 #include <ServiceLocator.h>
 #include <glm.hpp>
-#include "StateComponent.h"
+#include "PlayerStateComponent.h"
 #include "StateMachine.h"
 
 void load()
@@ -101,16 +101,14 @@ void load()
 	player1Obj->AddComponent(std::move(scoreComponent));
 	healthDisplayObj->AddComponent(std::move(healthObserver));
 	scoreDisplayObj->AddComponent(std::move(scoreObserver));
+	//Debug
+	auto debugStateComp = std::make_unique<dae::PlayerStateComponent>(player1Obj.get(), std::make_shared<dae::StandingState>());
+	player1Obj->AddComponent(std::move(debugStateComp));
+	//End Debug
 	scene.Add(player1Obj);
 	scene.Add(healthDisplayObj);
 	scene.Add(scoreDisplayObj);
 
-	//Debug
-	auto debugObj = std::make_shared<dae::GameObject>();
-	auto debugStateComp = std::make_unique<dae::StateComponent>(debugObj.get());
-	debugObj->AddComponent(std::move(debugStateComp));
-	scene.Add(debugObj);
-	debugObj->GetComponent<dae::StateComponent>()->SetState(std::make_shared<dae::StandingState>());
 
 	//Input
 	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_UP, std::make_unique<MoveCommand>(player1Obj.get(), glm::vec2{ 0,-1 }));

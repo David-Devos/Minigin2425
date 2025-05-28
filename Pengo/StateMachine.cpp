@@ -1,7 +1,8 @@
 #include "StateMachine.h"
-#include "StateComponent.h"
+#include "PlayerStateComponent.h"
 #include "InputManager.h"
 #include "SDL.h"
+#include <iostream>
 
 namespace dae
 {
@@ -16,14 +17,13 @@ namespace dae
 	//standing state
 	std::shared_ptr<PlayerStateMachine> StandingState::HandleInput()
 	{
-		auto& inputManager = InputManager::GetInstance();
-		const auto& prevState = inputManager.GetPrevState();
-		if (prevState[SDL_SCANCODE_UP] ||
-			prevState[SDL_SCANCODE_DOWN] || 
-			prevState[SDL_SCANCODE_LEFT] || 
-			prevState[SDL_SCANCODE_RIGHT]) {
-			return PlayerStateMachine::running;
-		}
+	if (m_MoveDir.x != 0 || m_MoveDir.y != 0)
+	{
+		m_MoveDir = glm::vec2{ 0,0 };
+		std::cout << "Turned to running\n";
+		return PlayerStateMachine::running;
+	}
+
 		return nullptr;
 	}
 
@@ -31,7 +31,7 @@ namespace dae
 	{
 		// idle sprite staat gwn stil
 	}
-
+	
 	void StandingState::OnEnter()
 	{
 		// 'idle sprite' is gwn de laatste pose die door de running state gepakt was, dus die gwn inladen
@@ -46,17 +46,14 @@ namespace dae
 	//running state
 	std::shared_ptr<PlayerStateMachine> RunningState::HandleInput()
 	{
-		auto& inputManager = InputManager::GetInstance();
-		const auto& prevState = inputManager.GetPrevState();
-		if (!prevState[SDL_SCANCODE_UP] && // Dus al dit zou in essentie vervangen worden met een call naar de inputmanager
-			!prevState[SDL_SCANCODE_DOWN] && // die de juist action opvraagd die dan zelf deze sdl_scancodes zou checken?
-			!prevState[SDL_SCANCODE_LEFT] &&
-			!prevState[SDL_SCANCODE_RIGHT]) {
+		// if colliding with enemy (best te checken adhv event idpv collision check), dying state
+		if (m_MoveDir == glm::vec2{ 0,0 })
+		{
+			std::cout << "Turned to standing\n";
 			return PlayerStateMachine::standing;
 		}
-		// if colliding with enemy (best te checken adhv event idpv collision check), dying state
+		m_MoveDir = glm::vec2{ 0,0 };
 		return nullptr;
-
 	}
 
 	void RunningState::Update()

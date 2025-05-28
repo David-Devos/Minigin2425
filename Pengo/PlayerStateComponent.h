@@ -5,13 +5,13 @@ namespace dae
 	class StateMachine;
 	class PlayerStateMachine;
 
-	class StateComponent final : public Component
+	class PlayerStateComponent final : public Component
 	{
 	public:
-		StateComponent(GameObject* gameObject);
+		PlayerStateComponent(GameObject* gameObject, std::shared_ptr <PlayerStateMachine> startingState);
 		void Update(float) override;
 		void Render() const override {};
-		void SetState(std::shared_ptr<PlayerStateMachine> stateMachine);
+		void AddMoveDirection(const glm::vec2& moveDir);
 	private:
 		std::shared_ptr<PlayerStateMachine> m_CurrentState;
 	};

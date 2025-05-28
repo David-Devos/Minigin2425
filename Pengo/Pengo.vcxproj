@@ -167,7 +167,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Actions.cpp" />
     <ClCompile Include="ControllableComponent.cpp" />
     <ClCompile Include="FpsComponent.cpp" />
     <ClCompile Include="GameActorCommands.cpp" />
@@ -177,11 +176,10 @@
     <ClCompile Include="PelletObserver.cpp" />
     <ClCompile Include="Pengo.cpp" />
     <ClCompile Include="RotatorComponent.cpp" />
-    <ClCompile Include="StateComponent.cpp" />
+    <ClCompile Include="PlayerStateComponent.cpp" />
     <ClCompile Include="StateMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Actions.h" />
     <ClInclude Include="ControllableComponent.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="FpsComponent.h" />
@@ -191,7 +189,7 @@
     <ClInclude Include="PelletEatComponent.h" />
     <ClInclude Include="PelletObserver.h" />
     <ClInclude Include="RotatorComponent.h" />
-    <ClInclude Include="StateComponent.h" />
+    <ClInclude Include="PlayerStateComponent.h" />
     <ClInclude Include="StateMachine.h" />
   </ItemGroup>
   <ItemGroup>

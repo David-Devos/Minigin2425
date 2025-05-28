@@ -1,8 +1,9 @@
 #pragma once
 #include <memory>
+#include <glm.hpp>
 namespace dae
 {
-	class StateComponent;
+	class PlayerStateComponent;
 
 	class StandingState;
 	class RunningState;
@@ -36,16 +37,17 @@ namespace dae
 		virtual void OnEnter() {};
 		virtual void OnExit() {};
 		virtual std::shared_ptr<PlayerStateMachine> HandleInput() = 0;
+		virtual void AddMoveDir(const glm::vec2& moveDir) { m_MoveDir += moveDir; }
 	protected:
-		std::unique_ptr<StateComponent> m_pPlayer;
+		glm::vec2 m_MoveDir{ 0.f, 0.f };
+		//std::unique_ptr<PlayerStateComponent> m_pPlayer;
+		// verwijzing naar controllable component
 	};
 
 
 	class StandingState final : public PlayerStateMachine
 	{
 	public:
-
-
 		std::shared_ptr<PlayerStateMachine> HandleInput() override;
 		void Update();
 		void OnEnter() override;
