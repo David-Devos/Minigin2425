@@ -19,9 +19,6 @@ namespace dae
 	private:
 		glm::vec2 m_Direction = {};
 		const float m_Speed = 180.0f;
-
-
-
 	};
 }
 

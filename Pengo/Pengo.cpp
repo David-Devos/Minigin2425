@@ -26,6 +26,7 @@
 #include <glm.hpp>
 #include "PlayerStateComponent.h"
 #include "StateMachine.h"
+#include "SnoBeeComponent.h"
 
 void load()
 {
@@ -48,7 +49,7 @@ void load()
 	scene.Add(background);
 
 	// We'll keep the fps counter for now
-	auto font = dae::ResourceManager::GetInstance().LoadFont("pengo-arcade.otf", 36);
+	auto font = dae::ResourceManager::GetInstance().LoadFont("pengo-arcade.otf", 12);
 	auto fps = std::make_shared<dae::GameObject>();
 	auto fpsTextComponent = std::make_unique<dae::TextComponent>("0 FPS", font, fps.get());
 
@@ -104,6 +105,15 @@ void load()
 	//Debug
 	auto debugStateComp = std::make_unique<dae::PlayerStateComponent>(player1Obj.get(), std::make_shared<dae::StandingState>());
 	player1Obj->AddComponent(std::move(debugStateComp));
+
+	auto snobeeTestObj = std::make_shared<dae::GameObject>();
+	snobeeTestObj->AddComponent(std::make_unique<dae::RenderComponent>(snobeeTestObj.get()));
+	snobeeTestObj->GetComponent<dae::RenderComponent>()->SetTexture("sun.png");
+	auto snobeeContrComp = std::make_unique<dae::ControllableComponent>(snobeeTestObj.get(), 100.f);
+	snobeeTestObj->AddComponent(std::make_unique<dae::SnoBeeComponent>(snobeeTestObj.get(), snobeeContrComp.get()));
+	snobeeTestObj->AddComponent(std::move(snobeeContrComp));
+	scene.Add(snobeeTestObj);
+
 	//End Debug
 	scene.Add(player1Obj);
 	scene.Add(healthDisplayObj);

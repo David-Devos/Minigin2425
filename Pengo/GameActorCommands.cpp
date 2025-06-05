@@ -14,11 +14,10 @@ MoveCommand::MoveCommand(dae::GameObject* actor, glm::vec2 moveDir) :
 
 void MoveCommand::Execute()
 {
-	std::cout << "movement direction" << m_MoveDir.x << ", " << m_MoveDir.y << std::endl;
 	if (m_pActor->HasComponent<dae::ControllableComponent>())
 	{
 		m_pActor->GetComponent<dae::ControllableComponent>()->AddDirection(glm::vec2{ m_MoveDir.x, m_MoveDir.y });
-		if (m_pActor->HasComponent<dae::PlayerStateComponent>())
+		if (m_pActor->HasComponent<dae::PlayerStateComponent>()) // abstraheer tot basestatecomponent, sinds sno bees en blokken ook movement nodig zullen hebben
 			m_pActor->GetComponent<dae::PlayerStateComponent>()->AddMoveDirection(glm::vec2{ m_MoveDir.x, m_MoveDir.y });
 	}
 	// als tegenovergestelde richtingen ingehouden worden, zal de speler functioneel stil staan, maar de state wel 'running' zijn

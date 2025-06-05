@@ -175,8 +175,10 @@
     <ClCompile Include="PelletEatComponent.cpp" />
     <ClCompile Include="PelletObserver.cpp" />
     <ClCompile Include="Pengo.cpp" />
+    <ClCompile Include="PushableComponent.cpp" />
     <ClCompile Include="RotatorComponent.cpp" />
     <ClCompile Include="PlayerStateComponent.cpp" />
+    <ClCompile Include="SnoBeeComponent.cpp" />
     <ClCompile Include="StateMachine.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -188,8 +190,10 @@
     <ClInclude Include="HealthObserver.h" />
     <ClInclude Include="PelletEatComponent.h" />
     <ClInclude Include="PelletObserver.h" />
+    <ClInclude Include="PushableComponent.h" />
     <ClInclude Include="RotatorComponent.h" />
     <ClInclude Include="PlayerStateComponent.h" />
+    <ClInclude Include="SnoBeeComponent.h" />
     <ClInclude Include="StateMachine.h" />
   </ItemGroup>
   <ItemGroup>

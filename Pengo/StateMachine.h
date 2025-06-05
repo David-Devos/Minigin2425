@@ -40,7 +40,7 @@ namespace dae
 		virtual void AddMoveDir(const glm::vec2& moveDir) { m_MoveDir += moveDir; }
 	protected:
 		glm::vec2 m_MoveDir{ 0.f, 0.f };
-		//std::unique_ptr<PlayerStateComponent> m_pPlayer;
+		// std::unique_ptr<PlayerStateComponent> m_pPlayer;
 		// verwijzing naar controllable component
 	};
 
