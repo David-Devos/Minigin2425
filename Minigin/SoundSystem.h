@@ -44,7 +44,6 @@ namespace dae
 	class SDLSoundSystem final : public SoundSystem
 	{
 	private:
-		std::vector<std::unique_ptr<Mix_Chunk>> m_pSound{};
 		const float m_Volume{ 1.f };
 
 		std::map<unsigned int, std::unique_ptr<Mix_Chunk*>> m_pChunks{};

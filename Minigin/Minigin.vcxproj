@@ -203,6 +203,7 @@
     <ClInclude Include="Font.h" />
     <ClInclude Include="GameActorCommand.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GridComponent.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="Observer.h" />
@@ -233,6 +234,7 @@
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="GameActorCommand.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GridComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Minigin.cpp" />
     <ClCompile Include="Observer.cpp" />

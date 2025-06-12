@@ -16,12 +16,14 @@ void MoveCommand::Execute()
 {
 	if (m_pActor->HasComponent<dae::ControllableComponent>())
 	{
-		m_pActor->GetComponent<dae::ControllableComponent>()->AddDirection(glm::vec2{ m_MoveDir.x, m_MoveDir.y });
-		if (m_pActor->HasComponent<dae::PlayerStateComponent>()) // abstraheer tot basestatecomponent, sinds sno bees en blokken ook movement nodig zullen hebben
-			m_pActor->GetComponent<dae::PlayerStateComponent>()->AddMoveDirection(glm::vec2{ m_MoveDir.x, m_MoveDir.y });
+		auto temp = m_pActor->GetComponent<dae::ControllableComponent>();
+		if (!temp->IsMoving())// zodat ik niet mid moving mn direction kan switchen
+		{
+			temp->AddDirection(glm::vec2{ m_MoveDir.x, m_MoveDir.y });
+			if (m_pActor->HasComponent<dae::PlayerStateComponent>()) // abstraheer tot basestatecomponent, sinds sno bees en blokken ook movement nodig zullen hebben
+				m_pActor->GetComponent<dae::PlayerStateComponent>()->AddMoveDirection(glm::vec2{ m_MoveDir.x, m_MoveDir.y });
+		}
 	}
-	// als tegenovergestelde richtingen ingehouden worden, zal de speler functioneel stil staan, maar de state wel 'running' zijn
-	// ik vrees dat dit niet te omzeilen valt als ik op deze manier werk, aangezien ik voor elke richting apart de MoveCommand call.
 }
 
 DamageCommand::DamageCommand(dae::GameObject* actor) :

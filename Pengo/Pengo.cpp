@@ -26,6 +26,7 @@
 #include <glm.hpp>
 #include "PlayerStateComponent.h"
 #include "StateMachine.h"
+#include "GridComponent.h"
 #include "SnoBeeComponent.h"
 
 void load()
@@ -78,12 +79,23 @@ void load()
 	auto scoreDisplayObj = std::make_shared<dae::GameObject>();
 	auto healthTextComponent = std::make_unique<dae::TextComponent>("Player Health: " + std::to_string(playerHP), font, healthDisplayObj.get());
 	auto scoreTextComponent = std::make_unique<dae::TextComponent>("Player Score: 0", font, scoreDisplayObj.get());
+	//Debug
+	auto debugGridObj = std::make_shared<dae::GameObject>();
+	debugGridObj->SetGlobalPosition(16, 16);
+	auto debugGridComp = std::make_unique<dae::GridComponent>(debugGridObj.get(), 10, 10, 16.f);
+	auto debugGridRenderComp = std::make_unique<dae::RenderComponent>(debugGridObj.get());
+	debugGridRenderComp->SetTexture("sun.png");
+	auto debugGridBlock = std::make_shared<dae::GameObject>();
+	debugGridBlock->AddComponent(std::make_unique<dae::RenderComponent>(debugGridBlock.get()));
+	debugGridBlock->GetComponent<dae::RenderComponent>()->SetTexture("earth.png");
+	debugGridComp->AddGridlockedGO(debugGridBlock.get(), 4, 5, dae::GridType::Block);
+	
 
 	//Player1
 	auto player1Obj = std::make_shared<dae::GameObject>();
 	player1Obj->AddComponent(std::make_unique<dae::RenderComponent>(player1Obj.get()));
 	player1Obj->GetComponent<dae::RenderComponent>()->SetTexture("Pengo1.png");
-	player1Obj->AddComponent(std::make_unique<dae::ControllableComponent>(player1Obj.get(), 100.f));
+	player1Obj->AddComponent(std::make_unique<dae::ControllableComponent>(player1Obj.get(), 100.f, debugGridComp.get()));
 	player1Obj->SetLocalPosition(300, 200);
 	player1Obj->SetGlobalPosition(300, 200);
 
@@ -109,9 +121,14 @@ void load()
 	auto snobeeTestObj = std::make_shared<dae::GameObject>();
 	snobeeTestObj->AddComponent(std::make_unique<dae::RenderComponent>(snobeeTestObj.get()));
 	snobeeTestObj->GetComponent<dae::RenderComponent>()->SetTexture("sun.png");
-	auto snobeeContrComp = std::make_unique<dae::ControllableComponent>(snobeeTestObj.get(), 100.f);
+	auto snobeeContrComp = std::make_unique<dae::ControllableComponent>(snobeeTestObj.get(), 100.f, debugGridComp.get());
 	snobeeTestObj->AddComponent(std::make_unique<dae::SnoBeeComponent>(snobeeTestObj.get(), snobeeContrComp.get()));
+	debugGridComp->AddGridlockedGO(player1Obj.get(), 5, 5, dae::GridType::Pengo);
 	snobeeTestObj->AddComponent(std::move(snobeeContrComp));
+	debugGridObj->AddComponent(std::move(debugGridComp));
+	debugGridObj->AddComponent(std::move(debugGridRenderComp));
+	scene.Add(debugGridBlock);
+	scene.Add(debugGridObj);
 	scene.Add(snobeeTestObj);
 
 	//End Debug
@@ -121,10 +138,10 @@ void load()
 
 
 	//Input
-	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_UP, std::make_unique<MoveCommand>(player1Obj.get(), glm::vec2{ 0,-1 }));
-	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_DOWN, std::make_unique<MoveCommand>(player1Obj.get(), glm::vec2{ 0,1 }));
-	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_LEFT, std::make_unique<MoveCommand>(player1Obj.get(), glm::vec2{ -1,0 }));
-	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Down, SDL_SCANCODE_RIGHT, std::make_unique<MoveCommand>(player1Obj.get(), glm::vec2{ 1,0 }));
+	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_UP, std::make_unique<MoveCommand>(player1Obj.get(), glm::vec2{ 0,-1 }));
+	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_DOWN, std::make_unique<MoveCommand>(player1Obj.get(), glm::vec2{ 0,1 }));
+	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_LEFT, std::make_unique<MoveCommand>(player1Obj.get(), glm::vec2{ -1,0 }));
+	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_RIGHT, std::make_unique<MoveCommand>(player1Obj.get(), glm::vec2{ 1,0 }));
 
 	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_K, std::make_unique<DamageCommand>(player1Obj.get()));
 	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_I, std::make_unique<PelletEatCommand>(player1Obj.get()));
