@@ -11,6 +11,13 @@ private:
 	glm::vec2 m_MoveDir;
 };
 
+class PushCommand final : public GameActorCommand
+{
+public:
+	PushCommand(dae::GameObject* actor);
+	void Execute() override;
+};
+
 class DamageCommand final : public GameActorCommand
 {
 public:

@@ -12,6 +12,6 @@ namespace dae
 	void SnoBeeComponent::Update(float)
 	{
 		// hier mn behaviour voor de snobee in stoppen
-		m_pControllableComponentHandle->AddDirection(glm::vec2{ 0,1 });
+		m_pControllableComponentHandle->AddDirection(glm::vec2{ 0,0 });
 	}
 }

@@ -15,7 +15,12 @@ namespace dae
 		if (row < 0 || row >= m_Rows || col < 0 || col >= m_Cols) {
 			return;
 		}
-		go->SetLocalPosition(col * m_CellSize, row * m_CellSize);
+		if (!IsFreeSpot(row, col))
+		{
+			return;
+		}
+		auto pos = m_pGameObject->GetGlobalTransform()->GetPosition();
+		go->SetLocalPosition(pos.x + col * m_CellSize, pos.y + row * m_CellSize);
 		go->SetTransformDirtyFlag();
 		GridLockedObject temp{};
 		temp.pGameObject = go;
@@ -26,10 +31,7 @@ namespace dae
 		{
 			m_BlocksOnGrid.emplace(std::make_tuple(row, col), new GridLockedObject(temp));
 		}
-		else
-		{
-			m_GridlockedObjects.emplace(go, new GridLockedObject(temp));
-		}
+		m_GridlockedObjects.emplace(go, new GridLockedObject(temp));
 	}
 	bool GridComponent::IsFreeSpot(int row, int col) const
 	{
@@ -64,5 +66,50 @@ namespace dae
 		}
 		obj->second->row += static_cast<int>(direction.y);
 		obj->second->col += static_cast<int>(direction.x);
+	}
+	glm::vec2 GridComponent::GetPosOnGO(GameObject* go)
+	{
+		auto it = m_GridlockedObjects.find(go);
+		if (it != m_GridlockedObjects.end())
+		{
+			return glm::vec2{ static_cast<float>(it->second->col), static_cast<float>(it->second->row) };
+		}
+		return glm::vec2{ -1.f, -1.f }; // not found
+	}
+	void GridComponent::BufferBlock(glm::vec2 position)
+	{
+		auto block = m_BlocksOnGrid.find(std::make_tuple(static_cast<int>(position.x), static_cast<int>(position.y)));
+		if (block == m_BlocksOnGrid.end())
+		{
+			return;
+		}
+		m_BlockBuffer.push_back(block->second);
+		m_BlocksOnGrid.erase(block);
+	}
+	void GridComponent::DeBufferBlock(GameObject* go)
+	{
+		auto it = m_GridlockedObjects.find(go);
+		if (it == m_GridlockedObjects.end())
+		{
+			return;
+		}
+		for (auto& block : m_BlockBuffer)
+		{
+			if (block->pGameObject == go)
+			{
+				m_BlocksOnGrid.emplace(std::make_tuple(it->second->row, it->second->col), it->second);
+				m_BlockBuffer.erase(std::remove(m_BlockBuffer.begin(), m_BlockBuffer.end(), block), m_BlockBuffer.end());
+				return; 
+			}
+		}
+	}
+	GameObject* GridComponent::GetBlockOnPos(glm::vec2 position)
+	{
+		auto block = m_BlocksOnGrid.find(std::make_tuple(static_cast<int>(position.y), static_cast<int>(position.x)));
+		if (block == m_BlocksOnGrid.end())
+		{
+			return nullptr;
+		}
+		return block->second->pGameObject;
 	}
 }

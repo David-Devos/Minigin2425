@@ -5,6 +5,7 @@
 #include <ServiceLocator.h>
 #include "PlayerStateComponent.h"
 #include <iostream>
+#include "PushableComponent.h"
 
 MoveCommand::MoveCommand(dae::GameObject* actor, glm::vec2 moveDir) :
 	GameActorCommand(actor),
@@ -24,6 +25,17 @@ void MoveCommand::Execute()
 				m_pActor->GetComponent<dae::PlayerStateComponent>()->AddMoveDirection(glm::vec2{ m_MoveDir.x, m_MoveDir.y });
 		}
 	}
+}
+
+PushCommand::PushCommand(dae::GameObject* actor) :
+	GameActorCommand(actor)
+{
+}
+void PushCommand::Execute()
+{
+	auto temp = m_pActor->GetComponent<dae::ControllableComponent>();
+	temp->Interact();
+
 }
 
 DamageCommand::DamageCommand(dae::GameObject* actor) :
@@ -60,3 +72,4 @@ void TempSoundCommand::Execute()
 	auto& ss = dae::ServiceLocator::GetSoundSystem();
 	ss.playSound(0, 10);
 }
+

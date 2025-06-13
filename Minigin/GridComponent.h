@@ -30,8 +30,12 @@ namespace dae
 		float GetCellSize() const { return m_CellSize; }
 		void AddGridlockedGO(GameObject* go, int row, int col, GridType type);
 		bool IsFreeSpot(int row, int col) const;
-		bool IsFreeSpot(GameObject* go, glm::vec2 direction) const;
+		bool IsFreeSpot(GameObject* go, glm::vec2 direction) const; // voor alles behalve blokken
 		void UpdatePos(GameObject* go, glm::vec2 direction);
+		GameObject* GetBlockOnPos(glm::vec2 direction) ;
+		glm::vec2 GetPosOnGO(GameObject* go);
+		void BufferBlock(glm::vec2 position);
+		void DeBufferBlock(GameObject* go);
 
 		GridComponent(const GridComponent& other) = delete;
 		GridComponent(GridComponent&& other) = delete;
@@ -42,8 +46,8 @@ namespace dae
 		int m_Cols;
 		float m_CellSize;
 		std::map<GameObject*, GridLockedObject*> m_GridlockedObjects;
-		std::map<std::tuple<int, int>, GridLockedObject*> m_BlocksOnGrid;
-		
+		std::map<std::tuple<int, int>, GridLockedObject*> m_BlocksOnGrid;// map met glm:vec2 deed raar en wou nie werken
+		std::vector<GridLockedObject*> m_BlockBuffer;
 	};
 }
 

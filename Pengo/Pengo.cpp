@@ -28,6 +28,7 @@
 #include "StateMachine.h"
 #include "GridComponent.h"
 #include "SnoBeeComponent.h"
+#include "PushableComponent.h"
 
 void load()
 {
@@ -81,21 +82,28 @@ void load()
 	auto scoreTextComponent = std::make_unique<dae::TextComponent>("Player Score: 0", font, scoreDisplayObj.get());
 	//Debug
 	auto debugGridObj = std::make_shared<dae::GameObject>();
-	debugGridObj->SetGlobalPosition(16, 16);
-	auto debugGridComp = std::make_unique<dae::GridComponent>(debugGridObj.get(), 10, 10, 16.f);
+	debugGridObj->SetLocalPosition(8, 8);
+	debugGridObj->SetTransformDirtyFlag();
+	auto debugGridComp = std::make_unique<dae::GridComponent>(debugGridObj.get(), 15, 13, 32.f);
 	auto debugGridRenderComp = std::make_unique<dae::RenderComponent>(debugGridObj.get());
 	debugGridRenderComp->SetTexture("sun.png");
 	auto debugGridBlock = std::make_shared<dae::GameObject>();
 	debugGridBlock->AddComponent(std::make_unique<dae::RenderComponent>(debugGridBlock.get()));
-	debugGridBlock->GetComponent<dae::RenderComponent>()->SetTexture("earth.png");
-	debugGridComp->AddGridlockedGO(debugGridBlock.get(), 4, 5, dae::GridType::Block);
+	debugGridBlock->GetComponent<dae::RenderComponent>()->SetTexture("Block.png");
+	debugGridBlock->AddComponent(std::make_unique<dae::ControllableComponent>(debugGridBlock.get(), 100.f, dae::GridType::Block, debugGridComp.get()));
+	auto pushableComp = std::make_unique<dae::PushableComponent>(debugGridBlock.get(), debugGridComp.get(), glm::vec2{ 4,5 });
+	pushableComp->BindCommand(std::make_tuple(1.f, 0.f), std::make_unique<MoveCommand>(debugGridBlock.get(), glm::vec2{1.f,0.f})); 
+	pushableComp->BindCommand(std::make_tuple(-1.f, 0.f), std::make_unique<MoveCommand>(debugGridBlock.get(), glm::vec2{ -1.f,0.f }));
+	pushableComp->BindCommand(std::make_tuple(0.f, 1.f), std::make_unique<MoveCommand>(debugGridBlock.get(), glm::vec2{ 0.f,1.f })); 
+	pushableComp->BindCommand(std::make_tuple(0.f, -1.f), std::make_unique<MoveCommand>(debugGridBlock.get(), glm::vec2{ 0.f,-1.f }));
+	debugGridBlock->AddComponent(std::move(pushableComp));
 	
 
 	//Player1
 	auto player1Obj = std::make_shared<dae::GameObject>();
 	player1Obj->AddComponent(std::make_unique<dae::RenderComponent>(player1Obj.get()));
 	player1Obj->GetComponent<dae::RenderComponent>()->SetTexture("Pengo1.png");
-	player1Obj->AddComponent(std::make_unique<dae::ControllableComponent>(player1Obj.get(), 100.f, debugGridComp.get()));
+	player1Obj->AddComponent(std::make_unique<dae::ControllableComponent>(player1Obj.get(), 100.f, dae::GridType::Pengo, debugGridComp.get()));
 	player1Obj->SetLocalPosition(300, 200);
 	player1Obj->SetGlobalPosition(300, 200);
 
@@ -114,14 +122,14 @@ void load()
 	player1Obj->AddComponent(std::move(scoreComponent));
 	healthDisplayObj->AddComponent(std::move(healthObserver));
 	scoreDisplayObj->AddComponent(std::move(scoreObserver));
-	//Debug
+	//Debug 
 	auto debugStateComp = std::make_unique<dae::PlayerStateComponent>(player1Obj.get(), std::make_shared<dae::StandingState>());
 	player1Obj->AddComponent(std::move(debugStateComp));
 
 	auto snobeeTestObj = std::make_shared<dae::GameObject>();
 	snobeeTestObj->AddComponent(std::make_unique<dae::RenderComponent>(snobeeTestObj.get()));
 	snobeeTestObj->GetComponent<dae::RenderComponent>()->SetTexture("sun.png");
-	auto snobeeContrComp = std::make_unique<dae::ControllableComponent>(snobeeTestObj.get(), 100.f, debugGridComp.get());
+	auto snobeeContrComp = std::make_unique<dae::ControllableComponent>(snobeeTestObj.get(), 100.f, dae::GridType::SnoBee, debugGridComp.get());
 	snobeeTestObj->AddComponent(std::make_unique<dae::SnoBeeComponent>(snobeeTestObj.get(), snobeeContrComp.get()));
 	debugGridComp->AddGridlockedGO(player1Obj.get(), 5, 5, dae::GridType::Pengo);
 	snobeeTestObj->AddComponent(std::move(snobeeContrComp));
@@ -146,6 +154,7 @@ void load()
 	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_K, std::make_unique<DamageCommand>(player1Obj.get()));
 	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_I, std::make_unique<PelletEatCommand>(player1Obj.get()));
 	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_G, std::make_unique<TempSoundCommand>(player1Obj.get()));
+	dae::InputManager::GetInstance().BindCommand(dae::KeyState::Tapped, SDL_SCANCODE_E, std::make_unique<PushCommand>(player1Obj.get()));
 
 
 
@@ -159,7 +168,7 @@ void load()
 	auto player2Obj = std::make_shared<dae::GameObject>();
 	player2Obj->AddComponent(std::make_unique<dae::RenderComponent>(player2Obj.get()));
 	player2Obj->GetComponent<dae::RenderComponent>()->SetTexture("Pengo2.png");
-	player2Obj->AddComponent(std::make_unique<dae::ControllableComponent>(player2Obj.get(), 100.f));
+	player2Obj->AddComponent(std::make_unique<dae::ControllableComponent>(player2Obj.get(), 100.f, dae::GridType::Pengo));
 	player2Obj->SetLocalPosition(300, 200);
 	player2Obj->SetGlobalPosition(300, 200);
 
