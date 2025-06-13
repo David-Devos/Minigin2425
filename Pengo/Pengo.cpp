@@ -84,9 +84,10 @@ void load()
 	auto debugGridObj = std::make_shared<dae::GameObject>();
 	debugGridObj->SetLocalPosition(8, 8);
 	debugGridObj->SetTransformDirtyFlag();
-	auto debugGridComp = std::make_unique<dae::GridComponent>(debugGridObj.get(), 15, 13, 32.f);
+	auto debugGridComp = std::make_unique<dae::GridComponent>(debugGridObj.get(), 13, 15, 32.f);
 	auto debugGridRenderComp = std::make_unique<dae::RenderComponent>(debugGridObj.get());
 	debugGridRenderComp->SetTexture("sun.png");
+
 	auto debugGridBlock = std::make_shared<dae::GameObject>();
 	debugGridBlock->AddComponent(std::make_unique<dae::RenderComponent>(debugGridBlock.get()));
 	debugGridBlock->GetComponent<dae::RenderComponent>()->SetTexture("Block.png");
@@ -97,6 +98,17 @@ void load()
 	pushableComp->BindCommand(std::make_tuple(0.f, 1.f), std::make_unique<MoveCommand>(debugGridBlock.get(), glm::vec2{ 0.f,1.f })); 
 	pushableComp->BindCommand(std::make_tuple(0.f, -1.f), std::make_unique<MoveCommand>(debugGridBlock.get(), glm::vec2{ 0.f,-1.f }));
 	debugGridBlock->AddComponent(std::move(pushableComp));
+
+	auto debugGridBlock2 = std::make_shared<dae::GameObject>();
+	debugGridBlock2->AddComponent(std::make_unique<dae::RenderComponent>(debugGridBlock2.get()));
+	debugGridBlock2->GetComponent<dae::RenderComponent>()->SetTexture("Block.png");
+	debugGridBlock2->AddComponent(std::make_unique<dae::ControllableComponent>(debugGridBlock2.get(), 100.f, dae::GridType::Block, debugGridComp.get()));
+	auto pushableComp2 = std::make_unique<dae::PushableComponent>(debugGridBlock2.get(), debugGridComp.get(), glm::vec2{ 0,5 });
+	pushableComp2->BindCommand(std::make_tuple(1.f, 0.f), std::make_unique<MoveCommand>(debugGridBlock2.get(), glm::vec2{ 1.f,0.f }));
+	pushableComp2->BindCommand(std::make_tuple(-1.f, 0.f), std::make_unique<MoveCommand>(debugGridBlock2.get(), glm::vec2{ -1.f,0.f }));
+	pushableComp2->BindCommand(std::make_tuple(0.f, 1.f), std::make_unique<MoveCommand>(debugGridBlock2.get(), glm::vec2{ 0.f,1.f }));
+	pushableComp2->BindCommand(std::make_tuple(0.f, -1.f), std::make_unique<MoveCommand>(debugGridBlock2.get(), glm::vec2{ 0.f,-1.f }));
+	debugGridBlock2->AddComponent(std::move(pushableComp2));
 	
 
 	//Player1
@@ -136,6 +148,7 @@ void load()
 	debugGridObj->AddComponent(std::move(debugGridComp));
 	debugGridObj->AddComponent(std::move(debugGridRenderComp));
 	scene.Add(debugGridBlock);
+	scene.Add(debugGridBlock2);
 	scene.Add(debugGridObj);
 	scene.Add(snobeeTestObj);
 

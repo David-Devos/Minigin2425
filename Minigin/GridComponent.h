@@ -23,12 +23,12 @@ namespace dae
 	class GridComponent : public Component
 	{
 	public:
-		GridComponent(GameObject* gameObj, int rows, int cols, float cellSize);
+		GridComponent(GameObject* gameObj, int cols, int rows, float cellSize);
 		virtual ~GridComponent() = default;
 		void Update(float) override {};
 		void Render() const override {};
 		float GetCellSize() const { return m_CellSize; }
-		void AddGridlockedGO(GameObject* go, int row, int col, GridType type);
+		void AddGridlockedGO(GameObject* go, int col, int row, GridType type);
 		bool IsFreeSpot(int row, int col) const;
 		bool IsFreeSpot(GameObject* go, glm::vec2 direction) const; // voor alles behalve blokken
 		void UpdatePos(GameObject* go, glm::vec2 direction);

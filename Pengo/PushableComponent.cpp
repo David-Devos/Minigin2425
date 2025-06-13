@@ -15,7 +15,7 @@ namespace dae
 	{
 		if (m_PushDirection != glm::vec2{ 0.0f, 0.0f })
 		{
-			if (!m_pGridComponent->IsFreeSpot(static_cast<int>(m_Position.y + m_PushDirection.y), static_cast<int>(m_Position.x + m_PushDirection.x)))
+			if (!m_pGridComponent->IsFreeSpot(static_cast<int>(m_Position.x + m_PushDirection.x), static_cast<int>(m_Position.y + m_PushDirection.y)))
 			{
 				m_PushDirection = glm::vec2{ 0.0f, 0.0f };
 				return;
@@ -60,8 +60,9 @@ namespace dae
 	}
 	void PushableComponent::HitWall(glm::vec2 newPos)
 	{
-		m_Position.x = newPos.y;
-		m_Position.y = newPos.x;
+		m_Position = newPos;
+		//m_Position.x = newPos.y; // ik zit zo diep in mn code, ik weet niet waarom dit plots invers is :(
+		//m_Position.y = newPos.x; // ik weet enkel en alleen dat het nu werkt
 		m_PushDirection = glm::vec2{ 0.0f, 0.0f };
 	}
 }

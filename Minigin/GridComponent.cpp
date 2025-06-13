@@ -4,18 +4,18 @@
 namespace dae
 {
 
-	GridComponent::GridComponent(GameObject* gameObj, int rows, int cols, float cellSize)
+	GridComponent::GridComponent(GameObject* gameObj, int cols, int rows, float cellSize)
 		: Component(gameObj), m_Rows(rows), m_Cols(cols), m_CellSize(cellSize) {
 		m_GridlockedObjects = std::map<GameObject*, GridLockedObject*>();
 		m_BlocksOnGrid = std::map<std::tuple<int, int>, GridLockedObject*>();
 	}
 
-	void GridComponent::AddGridlockedGO(dae::GameObject* go, int row, int col, GridType type)
+	void GridComponent::AddGridlockedGO(dae::GameObject* go, int col, int row, GridType type)
 	{
 		if (row < 0 || row >= m_Rows || col < 0 || col >= m_Cols) {
 			return;
 		}
-		if (!IsFreeSpot(row, col))
+		if (!IsFreeSpot(col, row))
 		{
 			return;
 		}
@@ -29,13 +29,13 @@ namespace dae
 		temp.type = type;
 		if (type == GridType::Block)
 		{
-			m_BlocksOnGrid.emplace(std::make_tuple(row, col), new GridLockedObject(temp));
+			m_BlocksOnGrid.emplace(std::make_tuple(col, row), new GridLockedObject(temp));
 		}
 		m_GridlockedObjects.emplace(go, new GridLockedObject(temp));
 	}
-	bool GridComponent::IsFreeSpot(int row, int col) const
+	bool GridComponent::IsFreeSpot(int col, int row) const
 	{
-		auto block = m_BlocksOnGrid.find(std::make_tuple(row, col));
+		auto block = m_BlocksOnGrid.find(std::make_tuple(col, row));
 		if (block != m_BlocksOnGrid.end())
 		{
 			return false;
@@ -54,8 +54,8 @@ namespace dae
 		{
 			return false; // object is nie op de grid
 		}
-		return IsFreeSpot(obj->second->row + static_cast<int>(direction.y),
-			obj->second->col + static_cast<int>(direction.x));
+		return IsFreeSpot(obj->second->col + static_cast<int>(direction.x),
+			obj->second->row + static_cast<int>(direction.y));
 	}
 	void GridComponent::UpdatePos(GameObject* go, glm::vec2 direction)
 	{
@@ -64,8 +64,8 @@ namespace dae
 		{
 			return;
 		}
-		obj->second->row += static_cast<int>(direction.y);
 		obj->second->col += static_cast<int>(direction.x);
+		obj->second->row += static_cast<int>(direction.y);
 	}
 	glm::vec2 GridComponent::GetPosOnGO(GameObject* go)
 	{
@@ -97,7 +97,7 @@ namespace dae
 		{
 			if (block->pGameObject == go)
 			{
-				m_BlocksOnGrid.emplace(std::make_tuple(it->second->row, it->second->col), it->second);
+				m_BlocksOnGrid.emplace(std::make_tuple(it->second->col, it->second->row), it->second);
 				m_BlockBuffer.erase(std::remove(m_BlockBuffer.begin(), m_BlockBuffer.end(), block), m_BlockBuffer.end());
 				return; 
 			}
@@ -105,7 +105,7 @@ namespace dae
 	}
 	GameObject* GridComponent::GetBlockOnPos(glm::vec2 position)
 	{
-		auto block = m_BlocksOnGrid.find(std::make_tuple(static_cast<int>(position.y), static_cast<int>(position.x)));
+		auto block = m_BlocksOnGrid.find(std::make_tuple(static_cast<int>(position.x), static_cast<int>(position.y)));
 		if (block == m_BlocksOnGrid.end())
 		{
 			return nullptr;
