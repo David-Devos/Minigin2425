@@ -142,9 +142,10 @@ void load()
 	snobeeTestObj->AddComponent(std::make_unique<dae::RenderComponent>(snobeeTestObj.get()));
 	snobeeTestObj->GetComponent<dae::RenderComponent>()->SetTexture("sun.png");
 	auto snobeeContrComp = std::make_unique<dae::ControllableComponent>(snobeeTestObj.get(), 100.f, dae::GridType::SnoBee, debugGridComp.get());
-	snobeeTestObj->AddComponent(std::make_unique<dae::SnoBeeComponent>(snobeeTestObj.get(), snobeeContrComp.get()));
+	snobeeTestObj->AddComponent(std::make_unique<dae::SnoBeeComponent>(snobeeTestObj.get(), snobeeContrComp.get(), debugGridComp.get()));
 	debugGridComp->AddGridlockedGO(player1Obj.get(), 5, 5, dae::GridType::Pengo);
 	snobeeTestObj->AddComponent(std::move(snobeeContrComp));
+	debugGridComp->AddGridlockedGO(snobeeTestObj.get(), 3, 5, dae::GridType::SnoBee);
 	debugGridObj->AddComponent(std::move(debugGridComp));
 	debugGridObj->AddComponent(std::move(debugGridRenderComp));
 	scene.Add(debugGridBlock);

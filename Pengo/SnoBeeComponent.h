@@ -4,14 +4,17 @@ namespace dae
 {
 	class GameObject;
 	class ControllableComponent;
+	class GridComponent;
 	class SnoBeeComponent : public Component
 	{
 	public:
-		SnoBeeComponent(GameObject* gameObject, ControllableComponent* controllableComponentHandle);
+		SnoBeeComponent(GameObject* gameObject, ControllableComponent* controllableComp, GridComponent* gridComp);
 		void Update(float deltaTime) override;
 		void Render() const override {};
 	private:
-		ControllableComponent* m_pControllableComponentHandle; //meaning NO OWNERSHIP
+		void MoveSnoBee(glm::vec2 direction);
+		ControllableComponent* m_pControllableComp;
+		GridComponent* m_pGridComponent;
 	};
 
 }

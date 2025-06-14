@@ -72,7 +72,9 @@ void dae::ControllableComponent::Interact()
 	{
 		glm::vec2 pos = m_pGridComponent->GetPosOnGO(m_pGameObject);
 		auto block = m_pGridComponent->GetBlockOnPos(glm::vec2{ pos.x + m_LastDirection.x, pos.y + m_LastDirection.y });
-		block->GetComponent<PushableComponent>()->GetInteracted(m_LastDirection);
+		if(block != nullptr)
+			block->GetComponent<PushableComponent>()->GetInteracted(m_LastDirection);
+		//else voor de water randen
 		return;
 	}
 }

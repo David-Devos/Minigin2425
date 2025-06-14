@@ -13,6 +13,7 @@ namespace dae
 		void AddDirection(const glm::vec2& direction) { m_Direction += direction; }
 		bool IsMoving() const;
 		void Interact();
+		glm::vec2 GetLastDirection() const { return m_LastDirection; }
 
 		ControllableComponent(const ControllableComponent& other) = delete;
 		ControllableComponent(ControllableComponent&& other) = delete;
