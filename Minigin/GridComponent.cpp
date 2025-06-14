@@ -32,6 +32,8 @@ namespace dae
 			m_BlocksOnGrid.emplace(std::make_tuple(col, row), new GridLockedObject(temp));
 		}
 		m_GridlockedObjects.emplace(go, new GridLockedObject(temp));
+		int counter = 0;
+		std::cout << counter << std::endl;
 	}
 	bool GridComponent::IsFreeSpot(int col, int row) const
 	{
