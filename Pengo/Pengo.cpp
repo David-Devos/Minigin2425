@@ -49,7 +49,6 @@ void loadLevel(const std::string& filename, dae::Scene& scene) {
 	gridObj->SetTransformDirtyFlag();
 	auto gridComp = std::make_unique<dae::GridComponent>(gridObj.get(), 13, 15, 32.f);
 
-
 	const int playerHP = 3;
 	//UI
 	auto font = dae::ResourceManager::GetInstance().LoadFont("pengo-arcade.otf", 12);
@@ -68,11 +67,12 @@ void loadLevel(const std::string& filename, dae::Scene& scene) {
 	std::unique_ptr<dae::PushableComponent> pushableComp;
 	std::unique_ptr<dae::HealthObserver> healthObserver;
 	std::unique_ptr<dae::PelletObserver> scoreObserver;
-	std::unique_ptr<dae::HealthComponent> healthComponent ;
+	std::unique_ptr<dae::HealthComponent> healthComponent;
 	std::unique_ptr<dae::PelletEatComponent> scoreComponent;
 	std::unique_ptr<dae::ControllableComponent> snobeeContrComp;
 	std::unique_ptr<dae::PlayerStateComponent> stateComp;
 	while (std::getline(file, line) && y < LEVEL_HEIGHT) {
+
 		for (int x = 0; x < LEVEL_WIDTH && x < line.size(); ++x) {
 			switch (line[x]) {
 			case 'B':
@@ -80,7 +80,7 @@ void loadLevel(const std::string& filename, dae::Scene& scene) {
 				gameObj->AddComponent(std::make_unique<dae::RenderComponent>(gameObj.get()));
 				gameObj->GetComponent<dae::RenderComponent>()->SetTexture("Block.png");
 				gameObj->AddComponent(std::make_unique<dae::ControllableComponent>(gameObj.get(), 100.f, dae::GridType::Block, gridComp.get()));
-				pushableComp = std::make_unique<dae::PushableComponent>(gameObj.get(), gridComp.get(), glm::vec2{ 0,5 });
+				pushableComp = std::make_unique<dae::PushableComponent>(gameObj.get(), gridComp.get(), glm::vec2{ x,y });
 				pushableComp->BindCommand(std::make_tuple(1.f, 0.f), std::make_unique<MoveCommand>(gameObj.get(), glm::vec2{ 1.f,0.f }));
 				pushableComp->BindCommand(std::make_tuple(-1.f, 0.f), std::make_unique<MoveCommand>(gameObj.get(), glm::vec2{ -1.f,0.f }));
 				pushableComp->BindCommand(std::make_tuple(0.f, 1.f), std::make_unique<MoveCommand>(gameObj.get(), glm::vec2{ 0.f,1.f }));
@@ -95,10 +95,10 @@ void loadLevel(const std::string& filename, dae::Scene& scene) {
 				gameObj->GetComponent<dae::RenderComponent>()->SetTexture("Pengo1.png");
 				gameObj->AddComponent(std::make_unique<dae::ControllableComponent>(gameObj.get(), 100.f, dae::GridType::Pengo, gridComp.get()));
 
-				//State 
+				//State
 				stateComp = std::make_unique<dae::PlayerStateComponent>(gameObj.get(), std::make_shared<dae::StandingState>());
 				gameObj->AddComponent(std::move(stateComp));
-				//Rest of UI
+				//Rest of UI 
 				healthObserver = std::make_unique<dae::HealthObserver>(gameObj.get());
 				scoreObserver = std::make_unique<dae::PelletObserver>(gameObj.get());
 				healthComponent = std::make_unique<dae::HealthComponent>(gameObj.get(), playerHP, healthTextComponent.get());
@@ -140,11 +140,12 @@ void loadLevel(const std::string& filename, dae::Scene& scene) {
 				break;
 			}
 		}
-		scene.Add(healthDisplayObj);
-		scene.Add(scoreDisplayObj);
-		scene.Add(gridObj);
 		++y;
 	}
+	gridObj->AddComponent(std::move(gridComp));
+	scene.Add(healthDisplayObj);
+	scene.Add(scoreDisplayObj);
+	scene.Add(gridObj);
 
 	file.close();
 }
@@ -168,7 +169,7 @@ void load()
 	background->AddComponent(std::make_unique<dae::RenderComponent>(background.get()));
 	background->GetComponent<dae::RenderComponent>()->SetTexture("EmptyMap.png");
 	scene.Add(background);
-	
+
 	loadLevel("../Data/Level1.txt", scene);
 
 	auto font = dae::ResourceManager::GetInstance().LoadFont("pengo-arcade.otf", 12);
