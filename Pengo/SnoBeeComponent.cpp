@@ -10,8 +10,7 @@ namespace dae
 		m_pControllableComp(controllableComp),
 		m_pGridComponent(GridComp)
 	{
-		m_pControllableComp->AddDirection(glm::vec2{1,0});
-
+		m_direction = glm::vec2{ 0, 1 };
 	}
 
 	void SnoBeeComponent::Update(float)
@@ -25,16 +24,15 @@ namespace dae
 			{
 				if (std::rand() % 2 == 0)
 				{
-					MoveSnoBee(glm::vec2{ 0, 1 });
+					m_direction = glm::vec2{ 0, 1 };
 				}
 				else
 				{
-					MoveSnoBee(glm::vec2{ 0, -1 });
+					m_direction = glm::vec2{ 0, -1 };
 				}
 			}
 			else
 			{
-				MoveSnoBee(glm::vec2{ m_pControllableComp->GetLastDirection().x, 0 });
 			}
 		}
 		else if (m_pControllableComp->GetLastDirection().y != 0)
@@ -43,25 +41,29 @@ namespace dae
 			{
 				if (std::rand() % 2 == 0)
 				{
-					MoveSnoBee(glm::vec2{ 1, 0 });
+					m_direction = glm::vec2{ 1, 0 };
 				}
 				else
 				{
-					MoveSnoBee(glm::vec2{ -1,  0 });
+					m_direction = glm::vec2{ -1,  0 };
 				}
 			}
 			else
 			{
-				MoveSnoBee(glm::vec2{ 0, m_pControllableComp->GetLastDirection().y });
 			}
 		}
+		MoveSnoBee(m_direction);
 	}
 	void SnoBeeComponent::MoveSnoBee(glm::vec2 direction)
 	{
-		if (m_pGridComponent->IsFreeSpot(m_pGameObject, direction))
+		if (m_pGridComponent->IsFreeSpot(GetGameObject(), direction))
 			m_pControllableComp->AddDirection(direction);
 		else
+		{
+
+			m_pControllableComp->AddDirection(direction);
 			m_pControllableComp->Interact();
+		}
 
 
 	}

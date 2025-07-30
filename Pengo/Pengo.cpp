@@ -45,9 +45,9 @@ void loadLevel(const std::string& filename, dae::Scene& scene) {
 
 
 	auto gridObj = std::make_shared<dae::GameObject>();
-	gridObj->SetLocalPosition(8, 8);
+	gridObj->SetLocalPosition(16, 16);
 	gridObj->SetTransformDirtyFlag();
-	auto gridComp = std::make_unique<dae::GridComponent>(gridObj.get(), 13, 15, 32.f);
+	auto gridComp = std::make_unique<dae::GridComponent>(gridObj.get(), LEVEL_WIDTH, LEVEL_HEIGHT, 32.f);
 
 	const int playerHP = 3;
 	//UI

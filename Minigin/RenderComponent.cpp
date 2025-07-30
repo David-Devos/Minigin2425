@@ -13,9 +13,9 @@ void dae::RenderComponent::Update(float /*deltaTime*/)
 
 void dae::RenderComponent::Render(Texture2D* texture) const
 {
-	if (m_pGameObject != nullptr)
+	if (GetGameObject() != nullptr)
 	{
-		const auto& pos = m_pGameObject->GetGlobalTransform()->GetPosition();
+		const auto& pos = GetGameObject()->GetGlobalTransform()->GetPosition();
 		Renderer::GetInstance().RenderTexture(*texture, pos.x, pos.y);
 	}
 }
@@ -32,9 +32,9 @@ void dae::RenderComponent::SetTexture(std::shared_ptr<Texture2D> texture)
 
 void dae::RenderComponent::Render() const
 {
-	if (m_pGameObject != nullptr && m_texture != nullptr)
+	if (GetGameObject() != nullptr && m_texture != nullptr)
 	{
-		const auto& pos = m_pGameObject->GetGlobalTransform()->GetPosition();
+		const auto& pos = GetGameObject()->GetGlobalTransform()->GetPosition();
 		Renderer::GetInstance().RenderTexture(*m_texture.get(), pos.x, pos.y);
 
 	}

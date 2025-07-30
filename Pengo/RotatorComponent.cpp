@@ -17,7 +17,7 @@ void dae::RotatorComponent::Update(float deltaTime)
 		m_Angle -= twoPi;
 	else if (m_Angle <= -twoPi)
 		m_Angle += twoPi;
-	m_pGameObject->GetLocalTransform()->SetPosition(glm::vec3{cos(m_Angle)*m_Radius, sin(m_Angle)*m_Radius,0});
-	m_pGameObject->SetTransformDirtyFlag();
+	GetGameObject()->GetLocalTransform()->SetPosition(glm::vec3{cos(m_Angle)*m_Radius, sin(m_Angle)*m_Radius,0});
+	GetGameObject()->SetTransformDirtyFlag();
 }
 

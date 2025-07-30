@@ -9,7 +9,7 @@ namespace dae
 		m_Position(position)
 	{
 		m_Commands = std::map<std::tuple<float, float>, std::unique_ptr<Command>>();
-		m_pGridComponent->AddGridlockedGO(m_pGameObject, static_cast<int>(position.x), static_cast<int>(position.y), GridType::Block);
+		m_pGridComponent->AddGridlockedGO(GetGameObject(), static_cast<int>(position.x), static_cast<int>(position.y), GridType::Block);
 	}
 	void PushableComponent::Update(float)
 	{
@@ -28,7 +28,8 @@ namespace dae
 		}
 	}
 	void PushableComponent::Render() const
-	{}
+	{
+	}
 	void PushableComponent::BindCommand(const std::tuple<float, float>& direction, std::unique_ptr<Command> command)
 	{
 		if (m_Commands.find(direction) != m_Commands.end())
@@ -47,22 +48,24 @@ namespace dae
 	}
 	void PushableComponent::GetInteracted(const glm::vec2& direction)
 	{
-		if (direction == glm::vec2{ 0.0f, 0.0f })
+		if (!m_pGridComponent->IsFreeSpot(GetGameObject(), direction))
 		{
 			auto it = m_Commands.find(std::make_tuple(direction.x, direction.y));
 			if (it != m_Commands.end())
 			{
 				it->second->Execute();
 			}
+			m_pGridComponent->RemoveGridlockedGO(GetGameObject(), GridType::Block);
 		}
-		m_PushDirection = direction;
-		m_pGridComponent->BufferBlock(m_Position);
+		else
+		{
+			m_PushDirection = direction;
+			m_pGridComponent->BufferBlock(m_Position);
+		}
 	}
 	void PushableComponent::HitWall(glm::vec2 newPos)
 	{
 		m_Position = newPos;
-		//m_Position.x = newPos.y; // ik zit zo diep in mn code, ik weet niet waarom dit plots invers is :(
-		//m_Position.y = newPos.x; // ik weet enkel en alleen dat het nu werkt
 		m_PushDirection = glm::vec2{ 0.0f, 0.0f };
 	}
 }

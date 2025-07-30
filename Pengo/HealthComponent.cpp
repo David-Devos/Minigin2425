@@ -23,12 +23,12 @@ void dae::HealthComponent::TakeDamage(int damage)
 	m_Health -= damage;
 	Event event(EventId::HealthChanged);
 	event.args[0] = EventArg(m_Health, m_pTextComponent);
-	Notify(event, m_pGameObject);
+	Notify(event, GetGameObject());
 	if (m_Health <= 0)
 	{
 		auto& ss = dae::ServiceLocator::GetSoundSystem();
 		ss.playSound(0, 10);
-		m_pGameObject->SetMarkedForDeath();
+		GetGameObject()->SetMarkedForDeath();
 	}
 }
 

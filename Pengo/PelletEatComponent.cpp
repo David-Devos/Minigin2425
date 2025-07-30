@@ -22,10 +22,10 @@ void dae::PelletEatComponent::EatPellet(int points)
 	m_Score += points;
 	Event event(EventId::PelletEaten);
 	event.args[0] = EventArg(m_Score, m_pTextComponent);
-	Notify(event, m_pGameObject);
+	Notify(event, GetGameObject());
 	if (m_Score <= 0)
 	{
-		m_pGameObject->SetMarkedForDeath();
+		GetGameObject()->SetMarkedForDeath();
 	}
 }
 

@@ -134,27 +134,44 @@ void dae::GameObject::RemoveComponent(const std::unique_ptr<Component>& toRemove
 	}
 }
 
+bool dae::GameObject::IsChild(GameObject* child)
+{
+	for (GameObject* currChild : m_pChildren)
+	{
+		if (child == currChild)
+			return true;
+	}
+	return false;
+}
+void dae::GameObject::SetMarkedForDeath()
+{
+	m_MarkedForDeath = true;
+	for (int i = 0; i < GetChildCount(); ++i)
+	{
+		GetChildAt(i)->SetMarkedForDeath();
+	}
+	
+}
 void dae::GameObject::SetParent(GameObject* parent, bool worldPosStays)
 {
-	if (parent != nullptr)
+	if (IsChild(parent) || parent == this || parent == m_pParent)
+		return;
+	if (parent == nullptr)
 	{
-		if (worldPosStays)
-		{
-			m_localTransform.SetPosition(m_globalTransform.GetPosition() - parent->GetGlobalTransform()->GetPosition());
-			m_posDirtyFlag = true;
-		}
-
-		if (m_pParent != nullptr)
-			m_pParent->RemoveChild(this);
-		m_pParent = parent;
-		m_pParent->AddChild(this);
+		auto globalTransform = GetGlobalTransform()->GetPosition();
+		SetLocalPosition(globalTransform.x, globalTransform.y);
 	}
 	else
 	{
-		if (m_pParent != nullptr)
-			m_pParent->RemoveChild(this);
-		m_pParent = nullptr;
-		m_localTransform = m_globalTransform;
+		if (worldPosStays)
+		{
+			glm::vec3 pos = GetGlobalTransform()->GetPosition() - parent->GetGlobalTransform()->GetPosition();
+			SetLocalPosition(pos.x, pos.y);
+		}
+		SetTransformDirtyFlag();
 	}
+	if (m_pParent) m_pParent->RemoveChild(this);
+	m_pParent = parent;
+	if (m_pParent) m_pParent->AddChild(this);
 
 }

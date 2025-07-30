@@ -12,6 +12,7 @@ namespace dae
 
 	void GridComponent::AddGridlockedGO(dae::GameObject* go, int col, int row, GridType type)
 	{
+		go->SetParent(GetGameObject(), true);
 		if (row < 0 || row >= m_Rows || col < 0 || col >= m_Cols) {
 			return;
 		}
@@ -19,8 +20,8 @@ namespace dae
 		{
 			return;
 		}
-		auto pos = m_pGameObject->GetGlobalTransform()->GetPosition();
-		go->SetLocalPosition(pos.x + col * m_CellSize, pos.y + row * m_CellSize);
+		//auto pos = GetGameObject()->GetGlobalTransform()->GetPosition();
+		go->SetLocalPosition(col * m_CellSize, row * m_CellSize);
 		go->SetTransformDirtyFlag();
 		GridLockedObject temp{};
 		temp.pGameObject = go;
@@ -35,6 +36,16 @@ namespace dae
 		int counter = 0;
 		std::cout << counter << std::endl;
 	}
+	void GridComponent::RemoveGridlockedGO(GameObject* go, GridType type)
+	{
+		if (type == GridType::Block)
+		{
+			auto gridObj = m_GridlockedObjects.find(go)->second;
+			m_BlocksOnGrid.erase(std::tuple<int, int>{(*gridObj).col, (*gridObj).row});
+		}
+		m_GridlockedObjects.erase(go);
+		go->SetMarkedForDeath();
+	}
 	bool GridComponent::IsFreeSpot(int col, int row) const
 	{
 		auto block = m_BlocksOnGrid.find(std::make_tuple(col, row));
@@ -42,7 +53,7 @@ namespace dae
 		{
 			return false;
 		}
-		if (row > m_Rows || row < 0 || col > m_Cols || col < 0)
+		if (row >= m_Rows || row < 0 || col >= m_Cols || col < 0)
 		{
 			return false;
 		}
@@ -101,7 +112,7 @@ namespace dae
 			{
 				m_BlocksOnGrid.emplace(std::make_tuple(it->second->col, it->second->row), it->second);
 				m_BlockBuffer.erase(std::remove(m_BlockBuffer.begin(), m_BlockBuffer.end(), block), m_BlockBuffer.end());
-				return; 
+				return;
 			}
 		}
 	}

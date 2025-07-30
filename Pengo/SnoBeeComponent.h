@@ -15,6 +15,7 @@ namespace dae
 		void MoveSnoBee(glm::vec2 direction);
 		ControllableComponent* m_pControllableComp;
 		GridComponent* m_pGridComponent;
+		glm::vec2 m_direction{};
 	};
 
 }

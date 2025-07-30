@@ -7,8 +7,7 @@ namespace dae
 	{
 	protected:
 		Component(GameObject* gameObject);
-		//Component() = default; no default, cause a component can only exist with an owning game object
-		GameObject* m_pGameObject;
+		//Component() = default; no default, case a component can only exist with an owning game object
 
 	public:
 		virtual ~Component();
@@ -16,6 +15,7 @@ namespace dae
 		virtual void LateUpdate(float);
 		virtual void Render() const = 0;
 		bool GetMarkedForDeath() const { return m_MarkedForDeath; }
+		GameObject* GetGameObject() const { return m_pGameObject; }
 
 		Component(const Component& other) = delete;
 		Component(Component&& other) = delete;
@@ -23,6 +23,7 @@ namespace dae
 		Component& operator=(Component&& other) = delete;
 
 	private:
+		GameObject* m_pGameObject;
 		Transform* m_pTransform;
 		bool m_MarkedForDeath{ false };
 	};

@@ -29,8 +29,10 @@ namespace dae
 		void Render() const override {};
 		float GetCellSize() const { return m_CellSize; }
 		void AddGridlockedGO(GameObject* go, int col, int row, GridType type);
+		void RemoveGridlockedGO(GameObject* go, GridType type);
 		bool IsFreeSpot(int row, int col) const;
 		bool IsFreeSpot(GameObject* go, glm::vec2 direction) const; // voor alles behalve blokken
+		bool IsOOB(GameObject* go, glm::vec2 direction) const; // voor SnoBee specifiek
 		void UpdatePos(GameObject* go, glm::vec2 direction);
 		GameObject* GetBlockOnPos(glm::vec2 direction) ;
 		glm::vec2 GetPosOnGO(GameObject* go);

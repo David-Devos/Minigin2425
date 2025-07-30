@@ -30,7 +30,7 @@ namespace dae
 		template<typename T>
 		bool HasComponent();
 		bool GetMarkedForDeath() const { return m_MarkedForDeath; }
-		void SetMarkedForDeath() { m_MarkedForDeath = true; }
+		void SetMarkedForDeath();
 		void SetParent(GameObject* parent, bool worldPosStays);
 		GameObject* GetParent() const { return m_pParent; }
 		int GetChildCount() const { return int(m_pChildren.size()); }
@@ -47,6 +47,7 @@ namespace dae
 	private:
 		void RemoveChild(GameObject* child);
 		void AddChild(GameObject* child);
+		bool IsChild(GameObject* child);
 
 		GameObject* m_pParent{ nullptr };
 		std::vector<GameObject*> m_pChildren;
