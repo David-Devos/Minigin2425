@@ -73,7 +73,7 @@ void loadLevel(const std::string& filename, dae::Scene& scene) {
 	std::unique_ptr<dae::PlayerStateComponent> stateComp;
 	while (std::getline(file, line) && y < LEVEL_HEIGHT) {
 
-		for (int x = 0; x < LEVEL_WIDTH && x < line.size(); ++x) {
+		for (int x = 0; x < LEVEL_WIDTH && x < int(line.size()); ++x) {
 			switch (line[x]) {
 			case 'B':
 				gameObj = std::make_shared<dae::GameObject>();
