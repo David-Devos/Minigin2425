@@ -5,7 +5,8 @@
 #include "Renderer.h"
 
 
-dae::GameObject::GameObject()
+dae::GameObject::GameObject(std::string tag)
+	:m_Tag{tag}
 {
 	m_pChildren = std::vector<GameObject*>();
 	m_Components = std::vector<std::unique_ptr<Component>>();

@@ -47,8 +47,8 @@ void dae::ControllableComponent::Update(float deltaTime)
 				GetGameObject()->SetLocalPosition(
 					m_EstimatedEndPos.x,
 					m_EstimatedEndPos.y);
-				std::cout << "Moving to: " << m_EstimatedEndPos.x << ", "
-					<< m_EstimatedEndPos.y << std::endl;
+				//std::cout << "Moving to: " << m_EstimatedEndPos.x << ", "
+					//<< m_EstimatedEndPos.y << std::endl;
 				GetGameObject()->SetTransformDirtyFlag();
 				m_pGridComponent->UpdatePos(GetGameObject(), m_Direction);
 				m_TimeMoving = 0.0f;

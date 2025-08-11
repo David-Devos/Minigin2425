@@ -29,12 +29,16 @@
 #include "GridComponent.h"
 #include "SnoBeeComponent.h"
 #include "PushableComponent.h"
+#include "CollisionComponent.h"
+#include "ColliderManager.h"
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "PlayerObserver.h"
 
 const int LEVEL_WIDTH = 13;
 const int LEVEL_HEIGHT = 15;
+//std::unique_ptr<ColliderManager> ServiceLocator::m_pColManagerInstance = std::make_unique<ColliderManager>();
 
 
 void loadLevel(const std::string& filename, dae::Scene& scene) {
@@ -71,6 +75,10 @@ void loadLevel(const std::string& filename, dae::Scene& scene) {
 	std::unique_ptr<dae::PelletEatComponent> scoreComponent;
 	std::unique_ptr<dae::ControllableComponent> snobeeContrComp;
 	std::unique_ptr<dae::PlayerStateComponent> stateComp;
+	std::unique_ptr<dae::CollisionComponent> collisionComp;
+	std::unique_ptr<dae::PlayerObserver> playerObserver;
+	auto& cm = dae::ServiceLocator::GetColliderManager();
+	cm.AddObserver(gridComp.get());
 	while (std::getline(file, line) && y < LEVEL_HEIGHT) {
 
 		for (int x = 0; x < LEVEL_WIDTH && x < int(line.size()); ++x) {
@@ -90,23 +98,29 @@ void loadLevel(const std::string& filename, dae::Scene& scene) {
 				scene.Add(gameObj);
 				break;
 			case 'P':
-				gameObj = std::make_shared<dae::GameObject>();
+				gameObj = std::make_shared<dae::GameObject>("Player");
 				gameObj->AddComponent(std::make_unique<dae::RenderComponent>(gameObj.get()));
 				gameObj->GetComponent<dae::RenderComponent>()->SetTexture("Pengo1.png");
 				gameObj->AddComponent(std::make_unique<dae::ControllableComponent>(gameObj.get(), 100.f, dae::GridType::Pengo, gridComp.get()));
+				collisionComp = std::make_unique<dae::CollisionComponent>(gameObj.get(), glm::vec2{ 8,8 }, 16.f, 16.f, true);
+				cm.AddCollider(collisionComp.get());
+				gameObj->AddComponent(std::move(collisionComp));
 
 				//State
 				stateComp = std::make_unique<dae::PlayerStateComponent>(gameObj.get(), std::make_shared<dae::StandingState>());
 				gameObj->AddComponent(std::move(stateComp));
-				//Rest of UI 
+				//Rest of UI
+				playerObserver = std::make_unique<dae::PlayerObserver>(gameObj.get());
 				healthObserver = std::make_unique<dae::HealthObserver>(gameObj.get());
 				scoreObserver = std::make_unique<dae::PelletObserver>(gameObj.get());
 				healthComponent = std::make_unique<dae::HealthComponent>(gameObj.get(), playerHP, healthTextComponent.get());
 				scoreComponent = std::make_unique<dae::PelletEatComponent>(gameObj.get(), 0, scoreTextComponent.get());
 				healthDisplayObj->AddComponent(std::move(healthTextComponent));
 				scoreDisplayObj->AddComponent(std::move(scoreTextComponent));
+				cm.AddObserver(playerObserver.get());
 				healthComponent->AddObserver(healthObserver.get());
 				scoreComponent->AddObserver(scoreObserver.get());
+				gameObj->AddComponent(std::move(playerObserver));
 				gameObj->AddComponent(std::move(healthComponent));
 				gameObj->AddComponent(std::move(scoreComponent));
 				healthDisplayObj->AddComponent(std::move(healthObserver));
@@ -130,6 +144,9 @@ void loadLevel(const std::string& filename, dae::Scene& scene) {
 				gameObj = std::make_shared<dae::GameObject>();
 				gameObj->AddComponent(std::make_unique<dae::RenderComponent>(gameObj.get()));
 				gameObj->GetComponent<dae::RenderComponent>()->SetTexture("snobee.png");
+				collisionComp = std::make_unique<dae::CollisionComponent>(gameObj.get(), glm::vec2{ 8,8 }, 16.f, 16.f, true);
+				cm.AddCollider(collisionComp.get());
+				gameObj->AddComponent(std::move(collisionComp));
 				snobeeContrComp = std::make_unique<dae::ControllableComponent>(gameObj.get(), 100.f, dae::GridType::SnoBee, gridComp.get());
 				gameObj->AddComponent(std::make_unique<dae::SnoBeeComponent>(gameObj.get(), snobeeContrComp.get(), gridComp.get()));
 				gameObj->AddComponent(std::move(snobeeContrComp));
@@ -152,6 +169,7 @@ void loadLevel(const std::string& filename, dae::Scene& scene) {
 
 void load()
 {
+	dae::ServiceLocator::RegisterColliderManager(std::make_unique<dae::ColliderManager>());
 	//#if _DEBUG
 		//encapsulate in logging sound system in debug using macros
 	dae::ServiceLocator::RegisterSoundSystem(

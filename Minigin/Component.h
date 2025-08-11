@@ -7,7 +7,7 @@ namespace dae
 	{
 	protected:
 		Component(GameObject* gameObject);
-		//Component() = default; no default, case a component can only exist with an owning game object
+		//Component() = default; no default, cause a component can only exist with an owning game object
 
 	public:
 		virtual ~Component();

@@ -3,16 +3,16 @@
 #include "Component.h"
 namespace dae
 {
-	class PelletObserver : public Observer, public Component
+
+	class PlayerObserver : public Observer, public Component
 	{
 	public:
-		PelletObserver(GameObject* gameObject);
+		PlayerObserver(GameObject* gameObject);
+		~PlayerObserver();
 		void Notify(const BaseEvent& event, GameObject* actor) override;
 
 		virtual void Update(float deltaTime) override;
 		virtual void Render() const override;
 	};
 }
-
-
 

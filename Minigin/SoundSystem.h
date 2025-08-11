@@ -23,6 +23,8 @@ namespace dae
 		virtual void stopSound() = 0;
 		virtual void loadSound(const std::string& filePath, unsigned int id) = 0;
 		virtual void playSound(unsigned int id, const int volume) = 0;
+	protected:
+
 	private:
 	};
 	class NullSoundSystem final : public SoundSystem

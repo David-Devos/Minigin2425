@@ -21,7 +21,7 @@ void dae::HealthComponent::Render() const
 void dae::HealthComponent::TakeDamage(int damage)
 {
 	m_Health -= damage;
-	Event event(EventId::HealthChanged);
+	HealthChangedEvent event{};
 	event.args[0] = EventArg(m_Health, m_pTextComponent);
 	Notify(event, GetGameObject());
 	if (m_Health <= 0)

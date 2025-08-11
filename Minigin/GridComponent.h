@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "Observer.h"
 #include <vector>
 #include <memory>
 #include <map>
@@ -20,7 +21,7 @@ namespace dae
 		GridType type;
 	};
 
-	class GridComponent : public Component
+	class GridComponent : public Component, public Observer
 	{
 	public:
 		GridComponent(GameObject* gameObj, int cols, int rows, float cellSize);
@@ -38,6 +39,7 @@ namespace dae
 		glm::vec2 GetPosOnGO(GameObject* go);
 		void BufferBlock(glm::vec2 position);
 		void DeBufferBlock(GameObject* go);
+		void Notify(const BaseEvent& event, GameObject* actor) override;
 
 		GridComponent(const GridComponent& other) = delete;
 		GridComponent(GridComponent&& other) = delete;

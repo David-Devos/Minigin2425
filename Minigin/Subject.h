@@ -3,7 +3,7 @@
 #include "Observer.h"
 namespace dae
 {
-	struct Event;
+	struct BaseEvent;
 	class Subject
 	{
 	public:
@@ -11,7 +11,7 @@ namespace dae
 		virtual void AddObserver(Observer* observer) ;
 		virtual void RemoveObserver(Observer* observer) ;
 	protected:
-		virtual void Notify(const Event& event, GameObject* gameObject) ;
+		virtual void Notify(const BaseEvent& event, GameObject* gameObject) ;
 	private:
 		std::vector<Observer*> m_Observers;
 	};

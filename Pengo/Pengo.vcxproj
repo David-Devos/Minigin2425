@@ -175,6 +175,7 @@
     <ClCompile Include="PelletEatComponent.cpp" />
     <ClCompile Include="PelletObserver.cpp" />
     <ClCompile Include="Pengo.cpp" />
+    <ClCompile Include="PlayerObserver.cpp" />
     <ClCompile Include="PushableComponent.cpp" />
     <ClCompile Include="RotatorComponent.cpp" />
     <ClCompile Include="PlayerStateComponent.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="HealthObserver.h" />
     <ClInclude Include="PelletEatComponent.h" />
     <ClInclude Include="PelletObserver.h" />
+    <ClInclude Include="PlayerObserver.h" />
     <ClInclude Include="PushableComponent.h" />
     <ClInclude Include="RotatorComponent.h" />
     <ClInclude Include="PlayerStateComponent.h" />

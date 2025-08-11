@@ -9,8 +9,9 @@ namespace dae
 	{
 		m_Observers.erase(std::remove(m_Observers.begin(), m_Observers.end(), observer), m_Observers.end());
 	}
-	void Subject::Notify(const Event& event, GameObject* gameObject)
+	void Subject::Notify(const BaseEvent& event, GameObject* gameObject)
 	{
+
 		for (Observer* observer : m_Observers)
 		{
 			observer->Notify(event, gameObject);

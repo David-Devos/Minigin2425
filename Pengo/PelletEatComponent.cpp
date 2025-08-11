@@ -20,7 +20,7 @@ void dae::PelletEatComponent::Render() const
 void dae::PelletEatComponent::EatPellet(int points)
 {
 	m_Score += points;
-	Event event(EventId::PelletEaten);
+	PelletEatenEvent event{};
 	event.args[0] = EventArg(m_Score, m_pTextComponent);
 	Notify(event, GetGameObject());
 	if (m_Score <= 0)

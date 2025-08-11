@@ -6,9 +6,9 @@ dae::HealthObserver::HealthObserver(GameObject* gameObject)
 	: Component(gameObject)
 {
 }
-void dae::HealthObserver::Notify(const Event& event, GameObject*)
+void dae::HealthObserver::Notify(const BaseEvent& event, GameObject*)
 {
-	if (event.id == EventId::HealthChanged)
+	if (typeid(event) == typeid(HealthChangedEvent))
 	{
 		// make reference to text component in health observer, so we can change the text
 		TextComponent* textComp = static_cast<TextComponent*>(event.args[0].comp);

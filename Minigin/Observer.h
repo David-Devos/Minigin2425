@@ -1,4 +1,5 @@
 #pragma once
+#include "BaseEvent.h"
 #include "GameObject.h"
 namespace dae
 {
@@ -7,9 +8,8 @@ namespace dae
 	{
 	public:
 		virtual ~Observer() = default;
-		virtual void Notify(const Event& event, GameObject* actor) = 0;
+		virtual void Notify(const BaseEvent& event, GameObject* actor) = 0;
 	private:
-		std::vector<dae::GameObject*> m_pObserving;
 	};
 }
 

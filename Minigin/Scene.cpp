@@ -29,6 +29,7 @@ void Scene::RemoveAll()
 
 void Scene::Update(float deltaTime)
 {
+	dae::ServiceLocator::GetColliderManager().Update();
 	for(auto& object : m_objects)
 	{
 		object->Update(deltaTime);

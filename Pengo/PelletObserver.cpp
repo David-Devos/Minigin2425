@@ -6,9 +6,9 @@ dae::PelletObserver::PelletObserver(GameObject* gameObject)
 	: Component(gameObject)
 {
 }
-void dae::PelletObserver::Notify(const Event& event, GameObject*)
+void dae::PelletObserver::Notify(const BaseEvent& event, GameObject*)
 {
-	if (event.id == EventId::PelletEaten)
+	if (typeid(event) == typeid(PelletEatenEvent))
 	{
 		// make reference to text component in health observer, so we can change the text
 		TextComponent* textComp = static_cast<TextComponent*>(event.args[0].comp);

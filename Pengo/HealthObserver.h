@@ -7,7 +7,7 @@ namespace dae
 	{
 	public:
 		HealthObserver(GameObject* gameObject);
-		void Notify(const Event& event, GameObject* actor) override;
+		void Notify(const BaseEvent& event, GameObject* actor) override;
 
 		virtual void Update(float deltaTime) override;
 		virtual void Render() const override;

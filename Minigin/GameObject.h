@@ -35,9 +35,10 @@ namespace dae
 		GameObject* GetParent() const { return m_pParent; }
 		int GetChildCount() const { return int(m_pChildren.size()); }
 		GameObject* GetChildAt(int index) const { return m_pChildren[index]; }
+		std::string GetTag() { return m_Tag; };
 
 
-		GameObject();
+		GameObject(std::string tag = "");
 		~GameObject();
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
@@ -56,6 +57,7 @@ namespace dae
 		Transform m_globalTransform{};
 		Transform m_localTransform{};
 		bool m_posDirtyFlag{ false };
+		const std::string m_Tag{""};
 	};
 
 }

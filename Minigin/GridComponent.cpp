@@ -1,5 +1,8 @@
 #include "GridComponent.h"
 #include "GameObject.h"
+#include "ServiceLocator.h"
+#include "CollisionComponent.h"
+#include "Subject.h"
 #include <iostream>
 namespace dae
 {
@@ -124,5 +127,22 @@ namespace dae
 			return nullptr;
 		}
 		return block->second->pGameObject;
+	}
+	void GridComponent::Notify(const BaseEvent& event, GameObject* go)
+	{
+		if (typeid(event) == typeid(OnCollision))
+		{
+			if (go->GetTag() == "Player")
+			{
+				m_GridlockedObjects.erase(go);
+				ServiceLocator::GetColliderManager().RemoveCollider(go->GetComponent<CollisionComponent>());
+			}
+			else if (event.args->go->GetTag() == "Player")
+			{
+				m_GridlockedObjects.erase(event.args->go);
+				ServiceLocator::GetColliderManager().RemoveCollider(event.args->go->GetComponent<CollisionComponent>());
+
+			}
+		}
 	}
 }

@@ -6,7 +6,7 @@ namespace dae
 	class ControllableComponent : public Component
 	{
 	public:
-		ControllableComponent(dae::GameObject* gameObject, float movSpeed, GridType type, GridComponent* gridComp = nullptr);
+		ControllableComponent(GameObject* gameObject, float movSpeed, GridType type, GridComponent* gridComp = nullptr);
 		virtual ~ControllableComponent() = default;
 		void Update(float deltaTime) override;
 		void Render() const override {};
