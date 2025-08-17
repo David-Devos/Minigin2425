@@ -1,18 +1,31 @@
-# Minigin
+# My Engine
+This project is a variation upon the engine foundation given to me by DAE known as 'Minigin', as well as an attempted remake of the 1982 game 'Pengo'.
 
-Minigin is a very small project using [SDL2](https://www.libsdl.org/) and [glm](https://github.com/g-truc/glm) for 2D c++ game projects. It is in no way a game engine, only a barebone start project where everything sdl related has been set up. It contains glm for vector math, to aleviate the need to write custom vector and matrix classes.
 
-[![Build Status](https://github.com/avadae/minigin/actions/workflows/msbuild.yml/badge.svg)](https://github.com/avadae/msbuild/actions)
-[![GitHub Release](https://img.shields.io/github/v/release/avadae/minigin?logo=github&sort=semver)](https://github.com/avadae/minigin/releases/latest)
+# Game Requirements
+The game I was required to make had it's own requirements. Alas, despite my best efforts, not all have been met.
+You CAN play as Pengo and move around, push and break blocks, splash water to stun SnoBees and die. However, there is no way ingame to restart a level.
+Also, as soon as SnoBees come into contact with a sliding block, they immediately perish instead of being pushed and eventually squashed.
+On top of that, despite there being a counter visually, I failed to implement a functioning score counter.
+SnoBees move around on their own through a simple random chance behavior pattern and break blocks they come in contact with.
+This pattern does result in them getting stuck on the outer boundaries from time to time as well as coincidental immaculate overlapping with their kin.
+But they also spawn only once on start up and do not grow out of previously established blocks.
+When SnoBees touch Pengo, Pengo dies.
+When Pengo interacts with one of the outer boundaries, all SnoBees adjacent to that boundary will be stunned.
+The game does not have a main menu or game over screen, nor does it have any kind of high score mechanic (partly due to there not being a functioning score counter).
+There is no option for multiplayer. There is no controller support. All inputs are via keyboard.
 
-# Goal
+# Design Choices
+I purposefully kept States away from ingame functionality (i.e. movement, interaction, etc.) because I felt like this would replace the roll of Commands.
+That being said, I had hoped to eventually get to States to handle a menu state of sorts, but as mentioned before, I didn't get that far.
+For events, I chose to go for Observers/Subjects. While coupling was briefly an issue when trying to connect the engine to the game, this was solved when I
+switched from defining an event type by enum class, to defining an event type by typeof(EventClass). This helped particularly with the following.
+I chose to implement collisions (triggers, to be precise). I built these in engine, but to interact with the game through events, I required an in-engine not-game-specific event which is how I got to my choice for events. I wanted collisions because despite my following choice being 'making my game gridlocked', objects still slid between positions on that grid. If I were to design overlap through grid positions, I felt like this wouldn't come across very well.
+As mentioned above, I chose to make my game gridlocked. This had it's ups and downs. All grid interaction became nicer because I had single point access to everything on my grid. The only challenge was to make my grid system engine bound. Even still, I think I managed fairly well.
 
-Minigin can/may be used as a start project for the exam assignment in the course [Programming 4](https://youtu.be/j96Oh6vzhmg) at DAE. In that assignment students need to recreate a popular 80's arcade game with a game engine they need to program themselves. During the course we discuss several game programming patterns, using the book '[Game Programming Patterns](https://gameprogrammingpatterns.com/)' by [Robert Nystrom](https://github.com/munificent) as reading material. 
+# Consensus
+Despite my best efforts, not all targets were met in this task. HOWEVER, I am glad to have been put through this and I am happy with my end result. It has broadened my understanding of not only C++, but design patterns needed to handle C++ appropriately.
 
-# Disclaimer
 
-Minigin is, despite perhaps the suggestion in its name, **not** a game engine. It is just a very simple sdl2 ready project with some of the scaffolding in place to get started. None of the patterns discussed in the course are used yet (except singleton which use we challenge during the course). It is up to the students to implement their own vision for their engine, apply patterns as they see fit, create their game as efficient as possible.
 
-# Use
-
-Either download the latest release of this project and compile/run in visual studio or, since students need to have their work on github too, they can use this repository as a template (see the "Use this template" button at the top right corner). There is no point in forking this project.
+link to the github page (if you're not there already): https://github.com/David-Devos/Minigin2425.git
