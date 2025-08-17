@@ -2,6 +2,7 @@
 #include "ControllableComponent.h"
 #include "GameObject.h"
 #include "GridComponent.h"
+#include "ServiceLocator.h"
 #include <iostream>
 namespace dae
 {
@@ -13,8 +14,19 @@ namespace dae
 		m_direction = glm::vec2{ 0, 1 };
 	}
 
-	void SnoBeeComponent::Update(float)
+	SnoBeeComponent::~SnoBeeComponent()
 	{
+		ServiceLocator::GetColliderManager().RemoveObserver(this);
+	}
+
+	void SnoBeeComponent::Update(float deltaTime)
+	{
+		if (m_Counter > 0)
+		{
+			m_direction = glm::vec2{ 0, 0 };
+			m_Counter -= deltaTime;
+			return;
+		}
 		if (m_pControllableComp->IsMoving())
 			return;
 		std::srand(int(time(nullptr)));
@@ -54,8 +66,26 @@ namespace dae
 		}
 		MoveSnoBee(m_direction);
 	}
+	void SnoBeeComponent::Notify(const BaseEvent& event, GameObject* go)
+	{
+		if (typeid(event) != typeid(OnCollision))
+			return;
+		if (go != GetGameObject())
+			return;
+		if (go->GetTag() == "SnoBee" && event.args->go->GetTag() == "Water")
+		{
+			GetStunned();
+		}
+		else if (go->GetTag() == "Water" && event.args->go->GetTag() == "SnoBee")
+		{
+			GetStunned();
+		}
+
+	}
 	void SnoBeeComponent::MoveSnoBee(glm::vec2 direction)
 	{
+		if(direction == glm::vec2{ 0, 0 })
+			return;
 		if (m_pGridComponent->IsFreeSpot(GetGameObject(), direction))
 			m_pControllableComp->AddDirection(direction);
 		else

@@ -14,7 +14,10 @@ namespace dae
 
 		for (Observer* observer : m_Observers)
 		{
-			observer->Notify(event, gameObject);
+			if (observer)
+			{
+				observer->Notify(event, gameObject);
+			}
 		}
 	}
 }

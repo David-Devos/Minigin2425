@@ -1,12 +1,14 @@
 #pragma once
 #include "Component.h"
 #include "GameObject.h"
+#include <glm.hpp>
 namespace dae
 {
 	struct EventArg {
 		int i = 0;
 		Component* comp;
 		GameObject* go;
+		glm::vec2 vec2;
 	};
 
 	struct BaseEvent

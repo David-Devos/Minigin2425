@@ -1,19 +1,21 @@
 #pragma once
 #include "Component.h"
 #include "GridComponent.h"
+#include "Subject.h"
 namespace dae
 {
-	class ControllableComponent : public Component
+	class ControllableComponent : public Component, public Subject
 	{
 	public:
 		ControllableComponent(GameObject* gameObject, float movSpeed, GridType type, GridComponent* gridComp = nullptr);
-		virtual ~ControllableComponent() = default;
+		virtual ~ControllableComponent();
 		void Update(float deltaTime) override;
 		void Render() const override {};
 		void AddDirection(const glm::vec2& direction);
 		bool IsMoving() const;
 		void Interact();
 		glm::vec2 GetLastDirection() const { return m_LastDirection; }
+		
 
 		ControllableComponent(const ControllableComponent& other) = delete;
 		ControllableComponent(ControllableComponent&& other) = delete;

@@ -72,7 +72,10 @@ namespace dae
 		void stopSound() override;
 
 		void loadSound(const std::string& filePath, unsigned int id) override;
-
+		void Shutdown() { m_Game = false; };
+	private:
+		bool m_Game = true;
+		//std::condition_variable m_Condition; oftewel moet dit buiten soundsystem liggen, oftewel public getter voor notify?
 	};
 
 	class DebugSoundSystem final : public SoundSystem

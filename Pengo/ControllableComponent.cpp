@@ -1,7 +1,8 @@
 #include "ControllableComponent.h"
 #include "GameObject.h"
 #include "PushableComponent.h"
-#include <iostream>
+#include "Event.h"
+#include <InputManager.h>
 
 dae::ControllableComponent::ControllableComponent(dae::GameObject* gameObject, float movSpeed, GridType type, GridComponent* gridComp) :
 	Component(gameObject)
@@ -12,6 +13,22 @@ dae::ControllableComponent::ControllableComponent(dae::GameObject* gameObject, f
 	, m_Type(type)
 {
 
+}
+
+dae::ControllableComponent::~ControllableComponent()
+{
+	if (GetGameObject()->GetTag() == "Player")
+	{
+		// niet elegant, maar voor nu beste oplossing
+		dae::InputManager::GetInstance().UnbindCommand(dae::KeyState::Down, SDL_SCANCODE_LEFT);
+		dae::InputManager::GetInstance().UnbindCommand(dae::KeyState::Down, SDL_SCANCODE_UP);
+		dae::InputManager::GetInstance().UnbindCommand(dae::KeyState::Down, SDL_SCANCODE_RIGHT);
+		dae::InputManager::GetInstance().UnbindCommand(dae::KeyState::Down, SDL_SCANCODE_DOWN);
+		dae::InputManager::GetInstance().UnbindCommand(dae::KeyState::Tapped, SDL_SCANCODE_K);
+		dae::InputManager::GetInstance().UnbindCommand(dae::KeyState::Tapped, SDL_SCANCODE_I);
+		dae::InputManager::GetInstance().UnbindCommand(dae::KeyState::Tapped, SDL_SCANCODE_G);
+		dae::InputManager::GetInstance().UnbindCommand(dae::KeyState::Tapped, SDL_SCANCODE_E);
+	}
 }
 
 void dae::ControllableComponent::Update(float deltaTime)
@@ -74,8 +91,8 @@ void dae::ControllableComponent::AddDirection(const glm::vec2& direction)
 		auto pos = GetGameObject()->GetLocalTransform()->GetPosition();
 		float cellSize = m_pGridComponent->GetCellSize();
 		m_Direction += direction;
-		m_EstimatedEndPos.x += (std::round((pos.x )/cellSize ) + direction.x) * cellSize ;
-		m_EstimatedEndPos.y += (std::round((pos.y )/cellSize ) + direction.y) * cellSize ;
+		m_EstimatedEndPos.x += (std::round((pos.x) / cellSize) + direction.x) * cellSize;
+		m_EstimatedEndPos.y += (std::round((pos.y) / cellSize) + direction.y) * cellSize;
 	}
 }
 
@@ -91,8 +108,19 @@ void dae::ControllableComponent::Interact()
 		glm::vec2 pos = m_pGridComponent->GetPosOnGO(GetGameObject());
 		auto block = m_pGridComponent->GetBlockOnPos(glm::vec2{ pos.x + m_LastDirection.x, pos.y + m_LastDirection.y });
 		if (block != nullptr)
-			block->GetComponent<PushableComponent>()->GetInteracted(m_LastDirection);
-		//else voor de water randen
+		{
+			if (GetGameObject()->GetTag() == "Player")
+				block->GetComponent<PushableComponent>()->GetInteracted(m_LastDirection);
+			else
+				block->GetComponent<PushableComponent>()->GetInteracted(glm::vec2{ 0,0 });
+		}
+		else if (GetGameObject()->GetTag() == "Player" && m_pGridComponent->IsOOB(GetGameObject(), m_LastDirection))
+		{
+			WaterInteractEvent event{};
+			event.args[0] = EventArg(0, this, GetGameObject(), m_LastDirection);
+			Notify(event, GetGameObject());
+		}
 		return;
 	}
 }
+

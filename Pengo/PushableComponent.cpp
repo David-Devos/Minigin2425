@@ -1,5 +1,6 @@
 #include "PushableComponent.h"
 #include "GridComponent.h"
+#include <CollisionComponent.h>
 namespace dae
 {
 	PushableComponent::PushableComponent(GameObject* gameObject, GridComponent* gridComp, glm::vec2 position)
@@ -55,7 +56,8 @@ namespace dae
 			{
 				it->second->Execute();
 			}
-			m_pGridComponent->RemoveGridlockedGO(GetGameObject(), GridType::Block);
+			if (GetGameObject()->GetTag() != "Water") // ik heb deze waterchecks een beetje overal, is een last minute bug patch waar ik niet meer durf aan te komen, maar deze is zeker van belang
+				m_pGridComponent->RemoveGridlockedGO(GetGameObject(), GridType::Block);
 		}
 		else
 		{
@@ -67,5 +69,8 @@ namespace dae
 	{
 		m_Position = newPos;
 		m_PushDirection = glm::vec2{ 0.0f, 0.0f };
+		if (GetGameObject()->GetTag() == "Block")
+			GetGameObject()->GetComponent<CollisionComponent>()->m_Check = false;
+
 	}
 }

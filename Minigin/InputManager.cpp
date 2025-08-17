@@ -1,7 +1,7 @@
 
 #include <algorithm> 
 #include "InputManager.h"
-#include <backends/imgui_impl_sdl2.h>
+//#include <backends/imgui_impl_sdl2.h>
 #include <iostream>
 
 dae::InputManager::InputManager() {
@@ -22,7 +22,7 @@ bool dae::InputManager::ProcessInput()
 
 			// ImGui schtuff
 		}
-		ImGui_ImplSDL2_ProcessEvent(&e);
+		//ImGui_ImplSDL2_ProcessEvent(&e);
 	}
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	for (auto& command : m_Commands)

@@ -70,8 +70,9 @@ namespace dae
 	void SDLSoundSystem::doQueue()
 	{
 		std::unique_lock<std::mutex> lock(m_Mutex);
-		while (true)
+		while (m_Game)
 		{
+			//m_Condition.wait(lock, [this] { return !m_LoadQueue.empty() || !m_PlayQueue.empty(); }); ben er te laat mee begonnen om nu nog op de juiste plekken te notifyen
 			while (!m_LoadQueue.empty())
 			{
 				auto [id, filePath] = m_LoadQueue.front();

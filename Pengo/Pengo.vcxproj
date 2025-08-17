@@ -181,6 +181,7 @@
     <ClCompile Include="PlayerStateComponent.cpp" />
     <ClCompile Include="SnoBeeComponent.cpp" />
     <ClCompile Include="StateMachine.cpp" />
+    <ClCompile Include="WaterWallComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ControllableComponent.h" />
@@ -197,6 +198,7 @@
     <ClInclude Include="PlayerStateComponent.h" />
     <ClInclude Include="SnoBeeComponent.h" />
     <ClInclude Include="StateMachine.h" />
+    <ClInclude Include="WaterWallComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />

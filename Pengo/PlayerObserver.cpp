@@ -19,14 +19,16 @@ namespace dae
 	{
 		if (typeid(event) == typeid(OnCollision))
 		{
-			if (event.args->go->GetTag() == "Player")
+			if (event.args->go->GetTag() == "Player" && go->GetTag() == "SnoBee")
 			{
 
 				event.args->go->SetMarkedForDeath();
+				ServiceLocator::GetColliderManager().RemoveObserver(this);
 			}
-			else if (go->GetTag() == "Player")
+			else if (go->GetTag() == "Player" && event.args->go->GetTag() == "SnoBee")
 			{
 				go->SetMarkedForDeath();
+				ServiceLocator::GetColliderManager().RemoveObserver(this);
 
 			}
 		}

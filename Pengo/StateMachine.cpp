@@ -6,6 +6,8 @@
 
 namespace dae
 {
+	// sorry, ik ben te laat hieraan begonnen en ben niet zeker hoe deze weg te krijgen
+	// (shared_ptr veranderen naar unique_ptr werkt niet)
 	std::shared_ptr<StandingState> PlayerStateMachine::standing = std::make_shared<StandingState>();
 	std::shared_ptr<RunningState> PlayerStateMachine::running = std::make_shared<RunningState>();
 	std::shared_ptr<PushingState> PlayerStateMachine::pushing = std::make_shared<PushingState>();

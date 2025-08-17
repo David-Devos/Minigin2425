@@ -1,7 +1,6 @@
 #include "ColliderManager.h"
 #include "CollisionComponent.h"
 #include "BaseEvent.h"
-#include <iostream>
 
 void dae::ColliderManager::AddCollider(CollisionComponent* pCollide)
 {
@@ -33,7 +32,6 @@ void dae::ColliderManager::Update()
 				OnCollision event{};
 				event.args[0] = EventArg(0, nullptr, a->GetGameObject());
 				Notify(event, b->GetGameObject());
-				std::cout << "Overlapping\n";
 			}
 		}
 	}

@@ -6,6 +6,7 @@ namespace dae
 {
 
 	struct PlayerDiedEvent : public BaseEvent {};
+	struct WaterInteractEvent : public BaseEvent {};
 	struct HealthChangedEvent : public BaseEvent {};
 	struct PelletEatenEvent : public BaseEvent {};
 }

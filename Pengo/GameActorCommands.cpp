@@ -6,6 +6,8 @@
 #include "PlayerStateComponent.h"
 #include <iostream>
 #include "PushableComponent.h"
+#include "CollisionComponent.h"
+#include "WaterWallComponent.h"
 
 MoveCommand::MoveCommand(dae::GameObject* actor, glm::vec2 moveDir) :
 	GameActorCommand(actor),
@@ -36,6 +38,17 @@ void PushCommand::Execute()
 	auto temp = m_pActor->GetComponent<dae::ControllableComponent>();
 	temp->Interact();
 
+}
+SplashedCommand::SplashedCommand(dae::GameObject* actor) :
+	GameActorCommand(actor)
+{
+}
+void SplashedCommand::Execute()
+{
+	// render comp
+	auto ww = m_pActor->GetComponent<dae::WaterWallComponent>();
+	ww->ActivateWall();
+	std::cout << "Splashed!" << std::endl;
 }
 
 DamageCommand::DamageCommand(dae::GameObject* actor) :

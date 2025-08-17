@@ -35,6 +35,7 @@
 #include <fstream>
 #include <string>
 #include "PlayerObserver.h"
+#include "WaterWallComponent.h"
 
 const int LEVEL_WIDTH = 13;
 const int LEVEL_HEIGHT = 15;
@@ -53,15 +54,15 @@ void loadLevel(const std::string& filename, dae::Scene& scene) {
 	gridObj->SetTransformDirtyFlag();
 	auto gridComp = std::make_unique<dae::GridComponent>(gridObj.get(), LEVEL_WIDTH, LEVEL_HEIGHT, 32.f);
 
-	const int playerHP = 3;
+	//const int playerHP = 3;
 	//UI
 	auto font = dae::ResourceManager::GetInstance().LoadFont("pengo-arcade.otf", 12);
 	auto healthDisplayObj = std::make_shared<dae::GameObject>();
 	auto scoreDisplayObj = std::make_shared<dae::GameObject>();
-	auto healthTextComponent = std::make_unique<dae::TextComponent>("Player Health: " + std::to_string(playerHP), font, healthDisplayObj.get());
+	//auto healthTextComponent = std::make_unique<dae::TextComponent>("Player Health: " + std::to_string(playerHP), font, healthDisplayObj.get());
 	auto scoreTextComponent = std::make_unique<dae::TextComponent>("Player Score: 0", font, scoreDisplayObj.get());
-	healthTextComponent->SetPosition(0, 150);
-	scoreTextComponent->SetPosition(0, 170);
+	scoreTextComponent->SetPosition(16, 32);
+	//healthTextComponent->SetPosition(0, 150);
 
 	if (!file.is_open()) {
 		std::cerr << "Failed to open level file.\n";
@@ -71,22 +72,64 @@ void loadLevel(const std::string& filename, dae::Scene& scene) {
 	std::unique_ptr<dae::PushableComponent> pushableComp;
 	std::unique_ptr<dae::HealthObserver> healthObserver;
 	std::unique_ptr<dae::PelletObserver> scoreObserver;
-	std::unique_ptr<dae::HealthComponent> healthComponent;
+	//std::unique_ptr<dae::HealthComponent> healthComponent;
 	std::unique_ptr<dae::PelletEatComponent> scoreComponent;
-	std::unique_ptr<dae::ControllableComponent> snobeeContrComp;
+	std::unique_ptr<dae::ControllableComponent> contrComp;
 	std::unique_ptr<dae::PlayerStateComponent> stateComp;
 	std::unique_ptr<dae::CollisionComponent> collisionComp;
 	std::unique_ptr<dae::PlayerObserver> playerObserver;
+	std::unique_ptr<dae::SnoBeeComponent> snoBeeComp;
 	auto& cm = dae::ServiceLocator::GetColliderManager();
 	cm.AddObserver(gridComp.get());
+	//water1
+	auto waterObj1 = std::make_shared<dae::GameObject>("Water");
+	auto waterComp1 = std::make_unique<dae::WaterWallComponent>(waterObj1.get(), gridComp.get(), glm::vec2{ 1,0 });
+	pushableComp = std::make_unique<dae::PushableComponent>(waterObj1.get(), gridComp.get(), glm::vec2{ 0,0 });
+	pushableComp->BindCommand(std::make_tuple(1.f, 0.f), std::make_unique<SplashedCommand>(waterObj1.get()));
+	waterObj1->AddComponent(std::move(pushableComp));
+	collisionComp = std::make_unique<dae::CollisionComponent>(waterObj1.get(), glm::vec2{ 0,0 }, 40.f, 1000.f, false);
+	cm.AddCollider(collisionComp.get());
+	waterObj1->AddComponent(std::move(collisionComp));
+	//water2
+	auto waterObj2 = std::make_shared<dae::GameObject>("Water");
+	auto waterComp2 = std::make_unique<dae::WaterWallComponent>(waterObj2.get(), gridComp.get(), glm::vec2{ -1,0 });
+	pushableComp = std::make_unique<dae::PushableComponent>(waterObj2.get(), gridComp.get(), glm::vec2{ 0,0 });
+	pushableComp->BindCommand(std::make_tuple(-1.f, 0.f), std::make_unique<SplashedCommand>(waterObj2.get()));
+	waterObj2->AddComponent(std::move(pushableComp));
+	collisionComp = std::make_unique<dae::CollisionComponent>(waterObj2.get(), glm::vec2{ 0,0 }, 40.f, 1000.f, false);
+	cm.AddCollider(collisionComp.get());
+	waterObj2->AddComponent(std::move(collisionComp));
+	//water3
+	auto waterObj3 = std::make_shared<dae::GameObject>("Water");
+	auto waterComp3 = std::make_unique<dae::WaterWallComponent>(waterObj3.get(), gridComp.get(), glm::vec2{ 0,1 });
+	pushableComp = std::make_unique<dae::PushableComponent>(waterObj3.get(), gridComp.get(), glm::vec2{ 0,0 });
+	pushableComp->BindCommand(std::make_tuple(0.f, 1.f), std::make_unique<SplashedCommand>(waterObj3.get()));
+	waterObj3->AddComponent(std::move(pushableComp));
+	collisionComp = std::make_unique<dae::CollisionComponent>(waterObj3.get(), glm::vec2{ 0,0 }, 1000.f, 40.f, false);
+	cm.AddCollider(collisionComp.get());
+	waterObj3->AddComponent(std::move(collisionComp));
+	//water4
+	auto waterObj4 = std::make_shared<dae::GameObject>("Water");
+	auto waterComp4 = std::make_unique<dae::WaterWallComponent>(waterObj4.get(), gridComp.get(), glm::vec2{ 0,-1 });
+	pushableComp = std::make_unique<dae::PushableComponent>(waterObj4.get(), gridComp.get(), glm::vec2{ 0,0 });
+	pushableComp->BindCommand(std::make_tuple(0.f, -1.f), std::make_unique<SplashedCommand>(waterObj4.get()));
+	waterObj4->AddComponent(std::move(pushableComp));
+	collisionComp = std::make_unique<dae::CollisionComponent>(waterObj4.get(), glm::vec2{ 0,0 }, 1000.f, 40.f, false);
+	cm.AddCollider(collisionComp.get());
+	waterObj4->AddComponent(std::move(collisionComp));
+	
+
 	while (std::getline(file, line) && y < LEVEL_HEIGHT) {
 
 		for (int x = 0; x < LEVEL_WIDTH && x < int(line.size()); ++x) {
 			switch (line[x]) {
 			case 'B':
-				gameObj = std::make_shared<dae::GameObject>();
+				gameObj = std::make_shared<dae::GameObject>("Block");
 				gameObj->AddComponent(std::make_unique<dae::RenderComponent>(gameObj.get()));
 				gameObj->GetComponent<dae::RenderComponent>()->SetTexture("Block.png");
+				collisionComp = std::make_unique<dae::CollisionComponent>(gameObj.get(), glm::vec2{ 8,8 }, 12.f, 12.f, false); // false and toggle later
+				cm.AddCollider(collisionComp.get());
+				gameObj->AddComponent(std::move(collisionComp));
 				gameObj->AddComponent(std::make_unique<dae::ControllableComponent>(gameObj.get(), 100.f, dae::GridType::Block, gridComp.get()));
 				pushableComp = std::make_unique<dae::PushableComponent>(gameObj.get(), gridComp.get(), glm::vec2{ x,y });
 				pushableComp->BindCommand(std::make_tuple(1.f, 0.f), std::make_unique<MoveCommand>(gameObj.get(), glm::vec2{ 1.f,0.f }));
@@ -101,7 +144,14 @@ void loadLevel(const std::string& filename, dae::Scene& scene) {
 				gameObj = std::make_shared<dae::GameObject>("Player");
 				gameObj->AddComponent(std::make_unique<dae::RenderComponent>(gameObj.get()));
 				gameObj->GetComponent<dae::RenderComponent>()->SetTexture("Pengo1.png");
-				gameObj->AddComponent(std::make_unique<dae::ControllableComponent>(gameObj.get(), 100.f, dae::GridType::Pengo, gridComp.get()));
+				contrComp = std::make_unique<dae::ControllableComponent>(gameObj.get(), 100.f, dae::GridType::Pengo, gridComp.get());
+				//water
+				contrComp->AddObserver(waterComp1.get());
+				contrComp->AddObserver(waterComp2.get());
+				contrComp->AddObserver(waterComp3.get());
+				contrComp->AddObserver(waterComp4.get());
+
+				gameObj->AddComponent(std::move(contrComp));
 				collisionComp = std::make_unique<dae::CollisionComponent>(gameObj.get(), glm::vec2{ 8,8 }, 16.f, 16.f, true);
 				cm.AddCollider(collisionComp.get());
 				gameObj->AddComponent(std::move(collisionComp));
@@ -113,17 +163,17 @@ void loadLevel(const std::string& filename, dae::Scene& scene) {
 				playerObserver = std::make_unique<dae::PlayerObserver>(gameObj.get());
 				healthObserver = std::make_unique<dae::HealthObserver>(gameObj.get());
 				scoreObserver = std::make_unique<dae::PelletObserver>(gameObj.get());
-				healthComponent = std::make_unique<dae::HealthComponent>(gameObj.get(), playerHP, healthTextComponent.get());
+				//healthComponent = std::make_unique<dae::HealthComponent>(gameObj.get(), playerHP, healthTextComponent.get());
 				scoreComponent = std::make_unique<dae::PelletEatComponent>(gameObj.get(), 0, scoreTextComponent.get());
-				healthDisplayObj->AddComponent(std::move(healthTextComponent));
+				//healthDisplayObj->AddComponent(std::move(healthTextComponent));
 				scoreDisplayObj->AddComponent(std::move(scoreTextComponent));
 				cm.AddObserver(playerObserver.get());
-				healthComponent->AddObserver(healthObserver.get());
+				//healthComponent->AddObserver(healthObserver.get());
 				scoreComponent->AddObserver(scoreObserver.get());
 				gameObj->AddComponent(std::move(playerObserver));
-				gameObj->AddComponent(std::move(healthComponent));
+				//gameObj->AddComponent(std::move(healthComponent));
 				gameObj->AddComponent(std::move(scoreComponent));
-				healthDisplayObj->AddComponent(std::move(healthObserver));
+				//healthDisplayObj->AddComponent(std::move(healthObserver));
 				scoreDisplayObj->AddComponent(std::move(scoreObserver));
 
 				// inputs
@@ -141,15 +191,17 @@ void loadLevel(const std::string& filename, dae::Scene& scene) {
 				scene.Add(gameObj);
 				break;
 			case 'S':
-				gameObj = std::make_shared<dae::GameObject>();
+				gameObj = std::make_shared<dae::GameObject>("SnoBee");
 				gameObj->AddComponent(std::make_unique<dae::RenderComponent>(gameObj.get()));
 				gameObj->GetComponent<dae::RenderComponent>()->SetTexture("snobee.png");
 				collisionComp = std::make_unique<dae::CollisionComponent>(gameObj.get(), glm::vec2{ 8,8 }, 16.f, 16.f, true);
 				cm.AddCollider(collisionComp.get());
 				gameObj->AddComponent(std::move(collisionComp));
-				snobeeContrComp = std::make_unique<dae::ControllableComponent>(gameObj.get(), 100.f, dae::GridType::SnoBee, gridComp.get());
-				gameObj->AddComponent(std::make_unique<dae::SnoBeeComponent>(gameObj.get(), snobeeContrComp.get(), gridComp.get()));
-				gameObj->AddComponent(std::move(snobeeContrComp));
+				contrComp = std::make_unique<dae::ControllableComponent>(gameObj.get(), 100.f, dae::GridType::SnoBee, gridComp.get());
+				snoBeeComp = std::make_unique<dae::SnoBeeComponent>(gameObj.get(), contrComp.get(), gridComp.get());
+				cm.AddObserver(snoBeeComp.get());
+				gameObj->AddComponent(std::move(snoBeeComp));
+				gameObj->AddComponent(std::move(contrComp));
 				gridComp->AddGridlockedGO(gameObj.get(), x, y, dae::GridType::SnoBee);
 				scene.Add(gameObj);
 				break;
@@ -159,7 +211,15 @@ void loadLevel(const std::string& filename, dae::Scene& scene) {
 		}
 		++y;
 	}
+	waterObj1->AddComponent(std::move(waterComp1));
+	waterObj2->AddComponent(std::move(waterComp2));
+	waterObj3->AddComponent(std::move(waterComp3));
+	waterObj4->AddComponent(std::move(waterComp4));
 	gridObj->AddComponent(std::move(gridComp));
+	scene.Add(waterObj1);
+	scene.Add(waterObj2);
+	scene.Add(waterObj3);
+	scene.Add(waterObj4);
 	scene.Add(healthDisplayObj);
 	scene.Add(scoreDisplayObj);
 	scene.Add(gridObj);

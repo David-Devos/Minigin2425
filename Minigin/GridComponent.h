@@ -10,7 +10,8 @@ namespace dae
 	{
 		Block,
 		Pengo,
-		SnoBee
+		SnoBee,
+		Water
 	};
 	class GameObject;
 	struct GridLockedObject
@@ -32,14 +33,15 @@ namespace dae
 		void AddGridlockedGO(GameObject* go, int col, int row, GridType type);
 		void RemoveGridlockedGO(GameObject* go, GridType type);
 		bool IsFreeSpot(int row, int col) const;
-		bool IsFreeSpot(GameObject* go, glm::vec2 direction) const; // voor alles behalve blokken
-		bool IsOOB(GameObject* go, glm::vec2 direction) const; // voor SnoBee specifiek
+		bool IsFreeSpot(GameObject* go, glm::vec2 direction) const; 
+		bool IsOOB(GameObject* go, glm::vec2 direction) const; 
 		void UpdatePos(GameObject* go, glm::vec2 direction);
 		GameObject* GetBlockOnPos(glm::vec2 direction) ;
 		glm::vec2 GetPosOnGO(GameObject* go);
 		void BufferBlock(glm::vec2 position);
 		void DeBufferBlock(GameObject* go);
 		void Notify(const BaseEvent& event, GameObject* actor) override;
+		glm::vec2 GetColRow() { return glm::vec2{ m_Cols, m_Rows }; }
 
 		GridComponent(const GridComponent& other) = delete;
 		GridComponent(GridComponent&& other) = delete;
@@ -53,5 +55,5 @@ namespace dae
 		std::map<std::tuple<int, int>, GridLockedObject*> m_BlocksOnGrid;// map met glm:vec2 deed raar en wou nie werken
 		std::vector<GridLockedObject*> m_BlockBuffer;
 	};
-}
+}			  
 

@@ -18,6 +18,13 @@ public:
 	void Execute() override;
 };
 
+class SplashedCommand final : public GameActorCommand
+{
+public:
+	SplashedCommand(dae::GameObject* actor);
+	void Execute() override;
+};
+
 class DamageCommand final : public GameActorCommand
 {
 public:
